@@ -40,7 +40,7 @@ export const SidebarMenuList = {
             items: [
                 {
                     title: "Dashboard",
-                    url: "/dashboard",
+                    url: "/",
                 },
                 {
                     title: "Stats",

@@ -14,8 +14,8 @@ import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import Link from "next/link";
-import Loading from "../../(dashboard)/modules/loading";
 import CustomPagination from "@/components/common/pagination";
+import Loading from "@/app/(dashboard)/modules/loading";
 
 
 const ModuleDetailsPage = () => {
