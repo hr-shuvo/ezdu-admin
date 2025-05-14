@@ -51,7 +51,7 @@ const ModuleEditPage = () => {
 
     }, [params.moduleId, reset]);
 
-    // console.log(module)
+    // console.log(form.getValues())
 
 
     const onSubmit = async (values: z.infer<typeof ModuleSchema>) => {

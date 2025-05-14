@@ -70,7 +70,7 @@ const CourseCreatePage = () =>{
                         }
                     });
 
-                    router.push(`/dashboard/modules/${moduleId}`);
+                    // router.push(`/modules/${moduleId}`);
                 }
                 else {
                     toast.error('Something went wrong', {

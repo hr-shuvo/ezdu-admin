@@ -20,8 +20,8 @@ import {BiArrowBack} from "react-icons/bi";
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
 import {Input} from "@/components/ui/input";
 import {getUnit, upsertUnit} from "@/app/_services/unit-service";
-import {getCourse} from "@/app/_services/course-services";
-import {getUnits} from "@/services/progressService";
+
+
 
 const UnitCreatePage = () =>{
     const router = useRouter();
@@ -69,7 +69,7 @@ const UnitCreatePage = () =>{
                         }
                     });
 
-                    router.push(`/dashboard/courses/${courseId}`);
+                    // router.push(`/courses/${courseId}`);
                 } else {
                     console.error("Error while creating course", res.error);
                     toast.error(res.error, {
@@ -195,7 +195,7 @@ const UnitCreatePage = () =>{
                                         className="w-3/6"
                                         variant="super"
                                         disabled={isPending}
-                                        onClick={() => router.push('../')}
+                                        onClick={() => router.push('../../')}
                                     >
                                         Cancel
                                     </Button>

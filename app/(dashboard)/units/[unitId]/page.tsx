@@ -144,7 +144,7 @@ const UnitDetailsPage = () => {
                                                             <Link href={`../lessons/${lesson._id}`}><Button variant='default'
                                                                 size='sm'><Eye /></Button></Link>
 
-                                                            <Link href={`./modules/form/${lesson._id}`}><Button variant='default'
+                                                            <Link href={`./${lesson.unitId}/lessons/form/${lesson._id}`}><Button variant='default'
                                                                 size='sm'><span><Pencil /></span></Button></Link>
                                                             <Link href={'#'}><Button variant='destructiveOutline'
                                                                 size='sm'><span><Trash /></span></Button></Link>

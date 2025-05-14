@@ -1,25 +1,26 @@
 'use client';
 
-import { getCourse } from "@/app/_services/course-services";
+import Link from "next/link";
+import { getLesson } from "@/app/_services/lesson-service";
+import { Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
+import { Button } from "@/components/ui/button";
+import { Eye, Pencil, PlusCircle, Trash } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
-import Link from "next/link";
-import Loading from "../../../../modules/loading";
-import { Button } from "@/components/ui/button";
 import { IoArrowBack } from "react-icons/io5";
-import { Eye, Pencil, PlusCircle, Trash } from "lucide-react";
-import { Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
-import { loadUnits } from "@/app/_services/unit-service";
+import { loadChallenges } from "@/app/_services/challenge-service";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import CustomPagination from "@/components/common/pagination";
+import Loading from "../../../../../modules/loading";
 
-const CourseDetailsPage = () => {
+
+const LessonDetailsPage = () => {
     const params = useParams();
     const [course, setCourse] = useState<any>();
 
-    const [units, setUnits] = useState([]);
+    const [challenges, setChallenges] = useState([]);
     const [totalCount, setTotalCount] = useState(0);
     const [totalPage, setTotalPage] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
@@ -29,24 +30,22 @@ const CourseDetailsPage = () => {
 
     useEffect(() => {
         startTransition(async () => {
-            const courseId = Array.isArray(params.courseId) ? params.courseId[0] : params.courseId;
-            const course = await getCourse(courseId);
-            setCourse(course);
+            const lessonId = Array.isArray(params.lessonId) ? params.lessonId[0] : params.lessonId;
+            const lesson = await getLesson(lessonId);
+            setCourse(lesson);
 
-            const response = await loadUnits(currentPage, pageSize, courseId);
-            setUnits(response.data);
+            const response = await loadChallenges(currentPage, pageSize, lessonId);
+            setChallenges(response.data);
             setTotalCount(response.totalCount);
             setTotalPage(response.totalPage);
             setCurrentPage(response.currentPage);
 
         })
-    }, [currentPage, pageSize, params.courseId]);
-
+    }, [currentPage, pageSize, params.lessonId]);
 
     if (isPending) {
         return <Loading />
     }
-
 
     return (
         <>
@@ -54,7 +53,7 @@ const CourseDetailsPage = () => {
                 <div className="w-full my-5 p-5 border">
 
                     <div className="flex justify-between">
-                        <h1 className="text-4xl">Course Details</h1>
+                        <h1 className="text-4xl">Lesson Details</h1>
                         <div className="gap-2 flex">
                             <Link href={`../modules/${course?.moduleId}`}>
                                 <Button size='sm'> <IoArrowBack /> <span>Back</span></Button>
@@ -106,7 +105,7 @@ const CourseDetailsPage = () => {
                 <div className="w-full my-5 p-5 border">
                     <div className="flex justify-between">
                         <div>
-                            <h1 className="text-lg">Unit List</h1>
+                            <h1 className="text-lg">Challenge List</h1>
                         </div>
                         <div>
                             <Link href="./modules/form">
@@ -126,27 +125,29 @@ const CourseDetailsPage = () => {
                         <div className="rounded-md border">
                             <Table>
                                 <TableHeader>
-                                    <TableRow>
-                                        <TableHead>Title</TableHead>
-                                        <TableHead>Description</TableHead>
+                                    <TableRow className="text-center">
+                                        <TableHead>Question</TableHead>
+                                        <TableHead>type</TableHead>
+                                        <TableHead>Options</TableHead>
                                         <TableHead>Actiion</TableHead>
                                     </TableRow>
                                 </TableHeader>
 
                                 <TableBody>
                                     {
-                                        units.length ? (
+                                        challenges.length ? (
 
-                                            units.map((unit: any) => (
-                                                <TableRow key={unit._id}>
-                                                    <TableCell>{unit.title}</TableCell>
-                                                    <TableCell>{unit.description}</TableCell>
+                                            challenges.map((data: any) => (
+                                                <TableRow key={data._id}>
+                                                    <TableCell>{data.question}</TableCell>
+                                                    <TableCell>{data.type}</TableCell>
+                                                    <TableCell>{'optionns'}</TableCell>
                                                     <TableCell>
                                                         <div className="flex justify-center gap-1">
-                                                            <Link href={`../units/${unit._id}`}><Button variant='default'
+                                                            <Link href={`../challenges/${data._id}`}><Button variant='default'
                                                                 size='sm'><Eye /></Button></Link>
 
-                                                            <Link href={`./modules/form/${unit._id}`}><Button variant='default'
+                                                            <Link href={`./modules/form/${data._id}`}><Button variant='default'
                                                                 size='sm'><span><Pencil /></span></Button></Link>
                                                             <Link href={'#'}><Button variant='destructiveOutline'
                                                                 size='sm'><span><Trash /></span></Button></Link>
@@ -210,8 +211,7 @@ const CourseDetailsPage = () => {
 
             </div>
         </>
-
     )
-};
+}
 
-export default CourseDetailsPage;
+export default LessonDetailsPage;
