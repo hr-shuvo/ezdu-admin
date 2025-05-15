@@ -1,211 +1,226 @@
 'use client';
 
 import Link from "next/link";
-import { getLesson } from "@/app/_services/lesson-service";
-import { Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
+import { getLesson, upsertLesson } from "@/app/_services/lesson-service";
+import {
+    Breadcrumb,
+    BreadcrumbItem,
+    BreadcrumbList,
+    BreadcrumbPage,
+    BreadcrumbSeparator
+} from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
-import { Eye, Pencil, PlusCircle, Trash } from "lucide-react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
-import { IoArrowBack } from "react-icons/io5";
-import { loadChallenges } from "@/app/_services/challenge-service";
+import { useForm } from "react-hook-form";
+import { LessonSchema } from "@/schemas/lessonSchema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { BiArrowBack } from "react-icons/bi";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import CustomPagination from "@/components/common/pagination";
+import * as z from "zod";
 import Loading from "../../../../../modules/loading";
+import { toast } from "sonner";
 
 
-const LessonDetailsPage = () => {
+const LessonEditPage = () => {
+    const router = useRouter();
     const params = useParams();
-    const [course, setCourse] = useState<any>();
-
-    const [challenges, setChallenges] = useState([]);
-    const [totalCount, setTotalCount] = useState(0);
-    const [totalPage, setTotalPage] = useState(0);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [pageSize, setPageSize] = useState(5);
     const [isPending, startTransition] = useTransition();
+    const [unitId, setUnitId] = useState<string>();
+
+    const form = useForm<z.infer<typeof LessonSchema>>({
+        resolver: zodResolver(LessonSchema),
+        defaultValues: {
+            title: "",
+            // description: "",
+            order: 1,
+
+            unitId: undefined
+        }
+
+    });
+    const {setValue, reset} = form;
 
 
     useEffect(() => {
+        const _unitId = Array.isArray(params.unitId) ? params.unitId[0] : params.unitId;
+        setUnitId(_unitId);
+
+        if (unitId) {
+            setValue('unitId', unitId);
+        }
+
+        const lessonId = Array.isArray(params.lessonId) ? params.lessonId[0] : params.lessonId;
+
         startTransition(async () => {
-            const lessonId = Array.isArray(params.lessonId) ? params.lessonId[0] : params.lessonId;
-            const lesson = await getLesson(lessonId);
-            setCourse(lesson);
+            const _lesson = await getLesson(lessonId);
+            reset(_lesson);
+        });
+    }, [unitId, setValue]);
 
-            const response = await loadChallenges(currentPage, pageSize, lessonId);
-            setChallenges(response.data);
-            setTotalCount(response.totalCount);
-            setTotalPage(response.totalPage);
-            setCurrentPage(response.currentPage);
+    const onSubmit = async (values: z.infer<typeof LessonSchema>) => {
+        startTransition(async () => {
+            await upsertLesson(values).then(res => {
+                if (res.success) {
+                    toast.success(res.success, {
+                        duration: 5000,
+                        style: {
+                            background: 'green',
+                            color: 'white'
+                        }
+                    });
 
-        })
-    }, [currentPage, pageSize, params.lessonId]);
+                    // router.push(`/courses/${courseId}`);
+                } else {
+                    console.error("Error while creating course", res.error);
+                    toast.error(res.error, {
+                        duration: 5000,
+                        style: {
+                            background: 'red',
+                            color: 'white'
+                        }
+                    });
+                }
+            });
+        });
+    }
+
 
     if (isPending) {
-        return <Loading />
+        return <Loading/>
     }
 
     return (
         <>
-            <div className="w-full flex-col">
-                <div className="w-full my-5 p-5 border">
+            <div className="w-full my-5 p-5 border">
 
-                    <div className="flex justify-between">
-                        <h1 className="text-4xl">Lesson Details</h1>
-                        <div className="gap-2 flex">
-                            <Link href={`../modules/${course?.moduleId}`}>
-                                <Button size='sm'> <IoArrowBack /> <span>Back</span></Button>
-                            </Link>
-                            <Link href={`./form/${course?._id}`}>
-                                <Button variant='sidebarOutline' size='sm'> <Pencil /> <span>Edit</span></Button>
-                            </Link>
-                        </div>
-                    </div>
-
-                    <div className="my-5">
-                        <Breadcrumb>
-                            <BreadcrumbList>
-                                <BreadcrumbItem>
-                                    <Link href="/" className="text-blue-500 hover:underline">Home</Link>
-                                </BreadcrumbItem>
-                                <BreadcrumbSeparator />
-                                <BreadcrumbItem>
-                                    <Link href="/dashboard" className="text-blue-500 hover:underline">Dashboard</Link>
-                                </BreadcrumbItem>
-                                <BreadcrumbSeparator />
-                                <BreadcrumbItem>
-                                    <Link href="./" className="text-blue-500 hover:underline">Courses</Link>
-                                </BreadcrumbItem>
-                                <BreadcrumbSeparator />
-                                <BreadcrumbItem>
-                                    <BreadcrumbPage>Details</BreadcrumbPage>
-                                </BreadcrumbItem>
-                            </BreadcrumbList>
-                        </Breadcrumb>
-                    </div>
-
-                    <div className="my-5">
-                        <div className="my-5">
-                            <h1 className="text-4xl font-bold">{course?.title}</h1>
-                            {/* <h3>{course?.subTitle}</h3> */}
-                        </div>
-                        <div className="flex justify-start text-xl gap-2">
-                            <div>2348 learner</div>
-                            <div className="flex justify-between gap-2"> 22 courses</div>
-
-                        </div>
-
-                    </div>
-
-
+                <div className="my-5">
+                    <Breadcrumb>
+                        <BreadcrumbList>
+                            <BreadcrumbItem>
+                                <Link href="/" className="text-blue-500 hover:underline">Home</Link>
+                            </BreadcrumbItem>
+                            <BreadcrumbSeparator/>
+                            <BreadcrumbItem>
+                                <Link href="/" className="text-blue-500 hover:underline">Dashboard</Link>
+                            </BreadcrumbItem>
+                            <BreadcrumbSeparator/>
+                            <BreadcrumbItem>
+                                <Link href="../.." className="text-blue-500 hover:underline">Modules</Link>
+                            </BreadcrumbItem>
+                            <BreadcrumbSeparator/>
+                            <BreadcrumbItem>
+                                <BreadcrumbPage>Edit</BreadcrumbPage>
+                            </BreadcrumbItem>
+                        </BreadcrumbList>
+                    </Breadcrumb>
                 </div>
 
-                <div className="w-full my-5 p-5 border">
-                    <div className="flex justify-between">
-                        <div>
-                            <h1 className="text-lg">Challenge List</h1>
-                        </div>
-                        <div>
-                            <Link href="./modules/form">
-                                <Button size='sm' variant='sidebarOutline'>
-                                    <PlusCircle /><span> Add</span>
-                                </Button>
-                            </Link>
-
-                        </div>
+                <div className="flex justify-between">
+                    <div>
+                        <h1 className="text-lg">Lesson Edit</h1>
                     </div>
+                    <div>
+                        <Link href="../..">
+                            <Button size='sm' variant='sidebarOutline'>
+                                <BiArrowBack/><span> Back</span>
+                            </Button>
+                        </Link>
 
-                    <div className="w-full">
-                        <div className="flex items-center py-4">
-                            <Input placeholder="Search" className="max-w-sm" />
-                        </div>
+                    </div>
+                </div>
 
-                        <div className="rounded-md border">
-                            <Table>
-                                <TableHeader>
-                                    <TableRow className="text-center">
-                                        <TableHead>Question</TableHead>
-                                        <TableHead>type</TableHead>
-                                        <TableHead>Options</TableHead>
-                                        <TableHead>Actiion</TableHead>
-                                    </TableRow>
-                                </TableHeader>
+                <div className="w-full">
 
-                                <TableBody>
-                                    {
-                                        challenges.length ? (
-
-                                            challenges.map((data: any) => (
-                                                <TableRow key={data._id}>
-                                                    <TableCell>{data.question}</TableCell>
-                                                    <TableCell>{data.type}</TableCell>
-                                                    <TableCell>{'optionns'}</TableCell>
-                                                    <TableCell>
-                                                        <div className="flex justify-center gap-1">
-                                                            <Link href={`../challenges/${data._id}`}><Button variant='default'
-                                                                size='sm'><Eye /></Button></Link>
-
-                                                            <Link href={`./modules/form/${data._id}`}><Button variant='default'
-                                                                size='sm'><span><Pencil /></span></Button></Link>
-                                                            <Link href={'#'}><Button variant='destructiveOutline'
-                                                                size='sm'><span><Trash /></span></Button></Link>
-
-
-                                                        </div>
-                                                    </TableCell>
-
-                                                </TableRow>
-                                            ))
-                                        ) : (
-                                            <TableRow>
-                                                <TableCell
-                                                    colSpan={3}
-                                                    className="h-24 text-center"
-                                                >
-                                                    No results.
-                                                </TableCell>
-                                            </TableRow>
-                                        )
-                                    }
-
-
-
-                                </TableBody>
-                            </Table>
-                        </div>
-
-                        <div className="flex items-center justify-between space-x-2 py-4">
-                            <div className="flex items-center text-sm text-muted-foreground gap-2">
-                                <div>{totalCount} items found</div>
-                                <div>
-                                    <Select value={pageSize.toString()} onValueChange={(value) => setPageSize(Number(value))}>
-                                        <SelectTrigger className="w-[100px]">
-                                            <SelectValue placeholder="Theme" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="5">5</SelectItem>
-                                            <SelectItem value="10">10</SelectItem>
-                                            <SelectItem value="20">20</SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                </div>
-                            </div>
-
-                            <div className="space-x-2">
-                                <CustomPagination
-                                    totalPage={totalPage}
-                                    currentPage={currentPage}
-                                    onPageChange={setCurrentPage}
+                    <Form {...form}>
+                        <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <FormField
+                                    control={form.control}
+                                    name="title"
+                                    render={({field}) => (
+                                        <FormItem>
+                                            <FormLabel>Title</FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    {...field}
+                                                    placeholder="Enter title"
+                                                    type="text"
+                                                    disabled={isPending}
+                                                />
+                                            </FormControl>
+                                            <FormMessage/>
+                                        </FormItem>
+                                    )}
                                 />
+
+                                {/*<FormField*/}
+                                {/*    control={form.control}*/}
+                                {/*    name="description"*/}
+                                {/*    render={({field}) => (*/}
+                                {/*        <FormItem>*/}
+                                {/*            <FormLabel>Description</FormLabel>*/}
+                                {/*            <FormControl>*/}
+                                {/*                <Input*/}
+                                {/*                    {...field}*/}
+                                {/*                    placeholder="Enter subtitle"*/}
+                                {/*                    type="text"*/}
+                                {/*                    disabled={isPending}*/}
+                                {/*                />*/}
+                                {/*            </FormControl>*/}
+                                {/*            <FormMessage/>*/}
+                                {/*        </FormItem>*/}
+                                {/*    )}*/}
+                                {/*/>*/}
+
+                                <FormField
+                                    control={form.control}
+                                    name="order"
+                                    render={({field}) => (
+                                        <FormItem>
+                                            <FormLabel>Order</FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    {...field}
+                                                    placeholder="order"
+                                                    type="number"
+                                                    disabled={isPending}
+                                                    onChange={(e) => field.onChange(Number(e.target.value))}
+                                                />
+                                            </FormControl>
+                                            <FormMessage/>
+                                        </FormItem>
+                                    )}
+                                />
+
+
+                                <div className="col-span-2 mt-5 flex justify-end gap-2">
+                                    <Button
+                                        type="button"
+                                        className="w-3/6"
+                                        variant="super"
+                                        disabled={isPending}
+                                        onClick={() => router.push('../../')}
+                                    >
+                                        Cancel
+                                    </Button>
+                                    <Button
+                                        type="submit"
+                                        className="w-3/6"
+                                        variant="secondary"
+                                        disabled={isPending}
+                                    >
+                                        Update
+                                    </Button>
+                                </div>
+
+
                             </div>
-                        </div>
 
+                        </form>
 
-                    </div>
-
-
+                    </Form>
                 </div>
 
 
@@ -214,4 +229,4 @@ const LessonDetailsPage = () => {
     )
 }
 
-export default LessonDetailsPage;
+export default LessonEditPage;
