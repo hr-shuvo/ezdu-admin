@@ -147,7 +147,7 @@ const LessonDetailsPage = () => {
                                                             <Link href={`../challenges/${data._id}`}><Button variant='default'
                                                                 size='sm'><Eye /></Button></Link>
 
-                                                            <Link href={`./modules/form/${data._id}`}><Button variant='default'
+                                                            <Link href={`./${data._id}/challenges/form/${data._id}`}><Button variant='default'
                                                                 size='sm'><span><Pencil /></span></Button></Link>
                                                             <Link href={'#'}><Button variant='destructiveOutline'
                                                                 size='sm'><span><Trash /></span></Button></Link>
