@@ -62,7 +62,7 @@ const UnitCreatePage = () =>{
                         }
                     });
 
-                    router.push(`/dashboard/courses/${courseId}`);
+                    // router.push(`/courses/${courseId}`);
                 } else {
                     console.error("Error while creating course", res.error);
                     toast.error(res.error, {

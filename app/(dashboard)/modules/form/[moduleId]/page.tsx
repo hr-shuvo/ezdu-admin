@@ -115,7 +115,7 @@ const ModuleEditPage = () => {
                         <h1 className="text-lg">Module Create</h1>
                     </div>
                     <div>
-                        <Link href="../../../../modules/form">
+                        <Link href="..">
                             <Button size='sm' variant='sidebarOutline'>
                                 <BiArrowBack /><span> Back</span>
                             </Button>

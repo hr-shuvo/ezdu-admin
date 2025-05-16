@@ -47,7 +47,7 @@ const ModuleCreatePage = () => {
                         }
                     });
 
-                    router.push('/dashboard/modules');
+                    router.push('/modules');
                 }
                 else {
                     toast.error('Something went wrong', {

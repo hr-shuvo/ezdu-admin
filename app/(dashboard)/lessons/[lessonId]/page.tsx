@@ -18,7 +18,7 @@ import Loading from "../../modules/loading";
 
 const LessonDetailsPage = () => {
     const params = useParams();
-    const [course, setCourse] = useState<any>();
+    const [lesson, setLesson] = useState<any>();
 
     const [challenges, setChallenges] = useState([]);
     const [totalCount, setTotalCount] = useState(0);
@@ -31,15 +31,14 @@ const LessonDetailsPage = () => {
     useEffect(() => {
         startTransition(async () => {
             const lessonId = Array.isArray(params.lessonId) ? params.lessonId[0] : params.lessonId;
-            const lesson = await getLesson(lessonId);
-            setCourse(lesson);
+            const _lesson = await getLesson(lessonId);
+            setLesson(_lesson);
 
             const response = await loadChallenges(currentPage, pageSize, lessonId);
             setChallenges(response.data);
             setTotalCount(response.totalCount);
             setTotalPage(response.totalPage);
             setCurrentPage(response.currentPage);
-
         })
     }, [currentPage, pageSize, params.lessonId]);
 
@@ -55,10 +54,10 @@ const LessonDetailsPage = () => {
                     <div className="flex justify-between">
                         <h1 className="text-4xl">Lesson Details</h1>
                         <div className="gap-2 flex">
-                            <Link href={`../modules/${course?.moduleId}`}>
+                            <Link href={`../units/${lesson?.unitId}`}>
                                 <Button size='sm'> <IoArrowBack /> <span>Back</span></Button>
                             </Link>
-                            <Link href={`./form/${course?._id}`}>
+                            <Link href={`../units/${lesson?.unitId}/lessons/form/${lesson?._id}`}>
                                 <Button variant='sidebarOutline' size='sm'> <Pencil /> <span>Edit</span></Button>
                             </Link>
                         </div>
@@ -88,7 +87,7 @@ const LessonDetailsPage = () => {
 
                     <div className="my-5">
                         <div className="my-5">
-                            <h1 className="text-4xl font-bold">{course?.title}</h1>
+                            <h1 className="text-4xl font-bold">{lesson?.title}</h1>
                             {/* <h3>{course?.subTitle}</h3> */}
                         </div>
                         <div className="flex justify-start text-xl gap-2">
@@ -108,7 +107,7 @@ const LessonDetailsPage = () => {
                             <h1 className="text-lg">Challenge List</h1>
                         </div>
                         <div>
-                            <Link href="./modules/form">
+                            <Link href={`../lessons/${lesson?._id}/challenges/form`}>
                                 <Button size='sm' variant='sidebarOutline'>
                                     <PlusCircle /><span> Add</span>
                                 </Button>
