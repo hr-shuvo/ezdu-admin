@@ -74,7 +74,7 @@ const ChallengeEditPage = () => {
                             </BreadcrumbItem>
                             <BreadcrumbSeparator />
                             <BreadcrumbItem>
-                                <Link href="/dashboard" className="text-blue-500 hover:underline">Dashboard</Link>
+                                <Link href="/" className="text-blue-500 hover:underline">Dashboard</Link>
                             </BreadcrumbItem>
                             <BreadcrumbSeparator />
                             <BreadcrumbItem>
@@ -93,7 +93,7 @@ const ChallengeEditPage = () => {
                         <h1 className="text-lg">Challenge Create</h1>
                     </div>
                     <div>
-                        <Link href="../">
+                        <Link href="../..">
                             <Button size='sm' variant='sidebarOutline'>
                                 <BiArrowBack /><span> Back</span>
                             </Button>

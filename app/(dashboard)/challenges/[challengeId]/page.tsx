@@ -41,7 +41,7 @@ const ChallengeDetailsPage = () => {
                         <Link href={`../lessons/${challenge?.lessonId}`}>
                             <Button size='sm'> <IoArrowBack /> <span>Back</span></Button>
                         </Link>
-                        <Link href={`./form/${challenge?._id}`}>
+                        <Link href={`../lessons/${challenge?.lessonId}/challenges/form/${challenge?._id}`}>
                             <Button variant='sidebarOutline' size='sm'> <Pencil /> <span>Edit</span></Button>
                         </Link>
                     </div>
