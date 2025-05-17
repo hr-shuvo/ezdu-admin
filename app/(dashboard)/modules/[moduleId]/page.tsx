@@ -26,7 +26,7 @@ const ModuleDetailsPage = () => {
     const [totalCount, setTotalCount] = useState(0);
     const [totalPage, setTotalPage] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
-    const [pageSize, setPageSize] = useState(5);
+    const [pageSize, setPageSize] = useState(10);
     const [isPending, startTransition] = useTransition();
 
     useEffect(() => {
@@ -129,12 +129,13 @@ const ModuleDetailsPage = () => {
                         </div>
 
                         <div className="rounded-md border">
-                            <Table>
+                            <Table className='w-full border-collapse [&>tbody>tr:nth-child(even)]:bg-gray-50'>
                                 <TableHeader>
                                     <TableRow>
-                                        <TableHead>Title</TableHead>
-                                        <TableHead>Modified At</TableHead>
-                                        <TableHead>Actiion</TableHead>
+                                        <TableHead className='text-center'>Title</TableHead>
+                                        <TableHead className='text-center'>Subtitle</TableHead>
+                                        <TableHead className='text-center'>Modified At</TableHead>
+                                        <TableHead className='text-center'>Action</TableHead>
                                     </TableRow>
                                 </TableHeader>
 
@@ -144,8 +145,9 @@ const ModuleDetailsPage = () => {
 
                                             courses.map((course: any) => (
                                                 <TableRow key={course._id}>
-                                                    <TableCell>{course.title}</TableCell>
-                                                    <TableCell>
+                                                    <TableCell className='border-r'>{course.title}</TableCell>
+                                                    <TableCell className='border-r'>{course.subTitle}</TableCell>
+                                                    <TableCell className='border-r text-center'>
                                                         <div className="flex-col flex">
                                                             <span>{new Date(course.createdAt).toLocaleString('en', {
                                                                 year: "numeric",

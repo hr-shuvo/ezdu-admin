@@ -23,7 +23,7 @@ const CourseDetailsPage = () => {
     const [totalCount, setTotalCount] = useState(0);
     const [totalPage, setTotalPage] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
-    const [pageSize, setPageSize] = useState(5);
+    const [pageSize, setPageSize] = useState(10);
     const [isPending, startTransition] = useTransition();
 
 
@@ -124,13 +124,13 @@ const CourseDetailsPage = () => {
                         </div>
 
                         <div className="rounded-md border">
-                            <Table>
+                            <Table className='w-full border-collapse [&>tbody>tr:nth-child(even)]:bg-gray-50'>
                                 <TableHeader>
                                     <TableRow>
-                                        <TableHead>Title</TableHead>
-                                        <TableHead>Description</TableHead>
-                                        <TableHead>Order</TableHead>
-                                        <TableHead>Action</TableHead>
+                                        <TableHead className='text-center'>Title</TableHead>
+                                        <TableHead className='text-center'>Description</TableHead>
+                                        <TableHead className='text-center'>Order</TableHead>
+                                        <TableHead className='text-center'>Action</TableHead>
                                     </TableRow>
                                 </TableHeader>
 
@@ -140,10 +140,10 @@ const CourseDetailsPage = () => {
 
                                             units.map((unit: any) => (
                                                 <TableRow key={unit._id}>
-                                                    <TableCell>{unit.title}</TableCell>
-                                                    <TableCell>{unit.description}</TableCell>
-                                                    <TableCell>{unit.order}</TableCell>
-                                                    <TableCell>
+                                                    <TableCell className='border-r'>{unit.title}</TableCell>
+                                                    <TableCell className='border-r'>{unit.description}</TableCell>
+                                                    <TableCell className='border-r'>{unit.order}</TableCell>
+                                                    <TableCell className='border-r text-center'>
                                                         <div className="flex justify-center gap-1">
                                                             <Link href={`../units/${unit._id}`}><Button variant='default'
                                                                 size='sm'><Eye /></Button></Link>

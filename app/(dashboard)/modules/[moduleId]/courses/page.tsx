@@ -13,14 +13,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import CustomPagination from "@/components/common/pagination";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
 
-const DashboardCoursePage = () => {
+const CoursePage = () => {
     const params = useParams();
 
     const [courses, setCourses] = useState([]);
     const [totalCount, setTotalCount] = useState(0);
     const [totalPage, setTotalPage] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
-    const [pageSize, setPageSize] = useState(5);
+    const [pageSize, setPageSize] = useState(10);
     const [isPending, startTransition] = useTransition();
 
 
@@ -55,7 +55,7 @@ const DashboardCoursePage = () => {
                             </BreadcrumbItem>
                             <BreadcrumbSeparator />
                             <BreadcrumbItem>
-                                <Link href="/dashboard" className="text-blue-500 hover:underline">Dashboard</Link>
+                                <Link href="/" className="text-blue-500 hover:underline">Dashboard</Link>
                             </BreadcrumbItem>
                             <BreadcrumbSeparator />
                             <BreadcrumbItem>
@@ -203,4 +203,4 @@ const DashboardCoursePage = () => {
 }
 
 
-export default DashboardCoursePage;
+export default CoursePage;

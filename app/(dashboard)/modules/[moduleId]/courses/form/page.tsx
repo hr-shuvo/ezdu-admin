@@ -63,7 +63,7 @@ const CourseCreatePage = () => {
                         }
                     });
 
-                    router.push(`/dashboard/modules/${moduleId}`);
+                    router.push(`/modules/${moduleId}`);
                 } else {
                     console.error("Error while creating course", res.error);
                     toast.error(res.error, {
