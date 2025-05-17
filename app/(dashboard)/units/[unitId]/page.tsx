@@ -107,7 +107,7 @@ const UnitDetailsPage = () => {
                             <h1 className="text-lg">Lesson List</h1>
                         </div>
                         <div>
-                            <Link href="./modules/form">
+                            <Link href={`./${unit?._id}/lessons/form`}>
                                 <Button size='sm' variant='sidebarOutline'>
                                     <PlusCircle /><span> Add</span>
                                 </Button>
