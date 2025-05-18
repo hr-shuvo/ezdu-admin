@@ -2,7 +2,13 @@
 
 import Link from "next/link";
 import { getLesson } from "@/app/_services/lesson-service";
-import { Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
+import {
+    Breadcrumb,
+    BreadcrumbItem,
+    BreadcrumbList,
+    BreadcrumbPage,
+    BreadcrumbSeparator
+} from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
 import { Eye, Pencil, PlusCircle, Trash } from "lucide-react";
 import { useParams } from "next/navigation";
@@ -14,6 +20,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import CustomPagination from "@/components/common/pagination";
 import Loading from "../../modules/loading";
+import { Badge } from "@/components/ui/badge";
 
 
 const LessonDetailsPage = () => {
@@ -43,7 +50,7 @@ const LessonDetailsPage = () => {
     }, [currentPage, pageSize, params.lessonId]);
 
     if (isPending) {
-        return <Loading />
+        return <Loading/>
     }
 
     return (
@@ -55,10 +62,10 @@ const LessonDetailsPage = () => {
                         <h1 className="text-4xl">Lesson Details</h1>
                         <div className="gap-2 flex">
                             <Link href={`../units/${lesson?.unitId}`}>
-                                <Button size='sm'> <IoArrowBack /> <span>Back</span></Button>
+                                <Button size='sm'> <IoArrowBack/> <span>Back</span></Button>
                             </Link>
                             <Link href={`../units/${lesson?.unitId}/lessons/form/${lesson?._id}`}>
-                                <Button variant='sidebarOutline' size='sm'> <Pencil /> <span>Edit</span></Button>
+                                <Button variant='sidebarOutline' size='sm'> <Pencil/> <span>Edit</span></Button>
                             </Link>
                         </div>
                     </div>
@@ -69,15 +76,15 @@ const LessonDetailsPage = () => {
                                 <BreadcrumbItem>
                                     <Link href="/" className="text-blue-500 hover:underline">Home</Link>
                                 </BreadcrumbItem>
-                                <BreadcrumbSeparator />
+                                <BreadcrumbSeparator/>
                                 <BreadcrumbItem>
                                     <Link href="/dashboard" className="text-blue-500 hover:underline">Dashboard</Link>
                                 </BreadcrumbItem>
-                                <BreadcrumbSeparator />
+                                <BreadcrumbSeparator/>
                                 <BreadcrumbItem>
                                     <Link href="./" className="text-blue-500 hover:underline">Courses</Link>
                                 </BreadcrumbItem>
-                                <BreadcrumbSeparator />
+                                <BreadcrumbSeparator/>
                                 <BreadcrumbItem>
                                     <BreadcrumbPage>Details</BreadcrumbPage>
                                 </BreadcrumbItem>
@@ -109,7 +116,7 @@ const LessonDetailsPage = () => {
                         <div>
                             <Link href={`../lessons/${lesson?._id}/challenges/form`}>
                                 <Button size='sm' variant='sidebarOutline'>
-                                    <PlusCircle /><span> Add</span>
+                                    <PlusCircle/><span> Add</span>
                                 </Button>
                             </Link>
 
@@ -118,17 +125,18 @@ const LessonDetailsPage = () => {
 
                     <div className="w-full">
                         <div className="flex items-center py-4">
-                            <Input placeholder="Search" className="max-w-sm" />
+                            <Input placeholder="Search" className="max-w-sm"/>
                         </div>
 
                         <div className="rounded-md border">
-                            <Table>
+                            <Table className='w-full border-collapse [&>tbody>tr:nth-child(even)]:bg-gray-50'>
                                 <TableHeader>
                                     <TableRow className="text-center">
-                                        <TableHead>Question</TableHead>
-                                        <TableHead>type</TableHead>
-                                        <TableHead>Options</TableHead>
-                                        <TableHead>Actiion</TableHead>
+                                        <TableHead className='text-center'>Sl</TableHead>
+                                        <TableHead className='text-center'>Question</TableHead>
+                                        <TableHead className='text-center'>Options</TableHead>
+                                        <TableHead className='text-center'>type</TableHead>
+                                        <TableHead className='text-center'>Action</TableHead>
                                     </TableRow>
                                 </TableHeader>
 
@@ -136,20 +144,40 @@ const LessonDetailsPage = () => {
                                     {
                                         challenges.length ? (
 
-                                            challenges.map((data: any) => (
+                                            challenges.map((data: any, index) => (
                                                 <TableRow key={data._id}>
-                                                    <TableCell>{data.question}</TableCell>
-                                                    <TableCell>{data.type}</TableCell>
-                                                    <TableCell>{'optionns'}</TableCell>
-                                                    <TableCell>
+                                                    <TableCell
+                                                        className='border-r text-center'>{(currentPage - 1) * pageSize + index + 1}</TableCell>
+                                                    <TableCell className='border-r'>{data.question}</TableCell>
+                                                    <TableCell className='border-r'>
+                                                        <div>
+                                                            {data.optionList.length ? (
+                                                                    data.optionList.map((option: any) => (
+                                                                        <div key={data._id}
+                                                                             className='flex flex-col gap-y-1'>
+                                                                            <Badge
+                                                                                className={option.correct ? 'bg-green-500' : 'bg-orange-500'}>{option.text}</Badge>
+                                                                        </div>
+                                                                    ))
+                                                                ) :
+                                                                (
+                                                                    <span>No Options, Please add</span>
+                                                                )}
+                                                        </div>
+                                                    </TableCell>
+                                                    <TableCell className='border-r'>{data.type}</TableCell>
+                                                    <TableCell className='text-center'>
                                                         <div className="flex justify-center gap-1">
-                                                            <Link href={`../challenges/${data._id}`}><Button variant='default'
-                                                                size='sm'><Eye /></Button></Link>
+                                                            <Link href={`../challenges/${data._id}`}><Button
+                                                                variant='default'
+                                                                size='sm'><Eye/></Button></Link>
 
-                                                            <Link href={`./${data.lessonId}/challenges/form/${data._id}`}><Button variant='default'
-                                                                size='sm'><span><Pencil /></span></Button></Link>
+                                                            <Link
+                                                                href={`./${data.lessonId}/challenges/form/${data._id}`}><Button
+                                                                variant='default'
+                                                                size='sm'><span><Pencil/></span></Button></Link>
                                                             <Link href={'#'}><Button variant='destructiveOutline'
-                                                                size='sm'><span><Trash /></span></Button></Link>
+                                                                                     size='sm'><span><Trash/></span></Button></Link>
 
 
                                                         </div>
@@ -170,7 +198,6 @@ const LessonDetailsPage = () => {
                                     }
 
 
-
                                 </TableBody>
                             </Table>
                         </div>
@@ -179,9 +206,10 @@ const LessonDetailsPage = () => {
                             <div className="flex items-center text-sm text-muted-foreground gap-2">
                                 <div>{totalCount} items found</div>
                                 <div>
-                                    <Select value={pageSize.toString()} onValueChange={(value) => setPageSize(Number(value))}>
+                                    <Select value={pageSize.toString()}
+                                            onValueChange={(value) => setPageSize(Number(value))}>
                                         <SelectTrigger className="w-[100px]">
-                                            <SelectValue placeholder="Theme" />
+                                            <SelectValue placeholder="Theme"/>
                                         </SelectTrigger>
                                         <SelectContent>
                                             <SelectItem value="5">5</SelectItem>

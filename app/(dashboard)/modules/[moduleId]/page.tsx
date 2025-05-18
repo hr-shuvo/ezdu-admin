@@ -147,7 +147,7 @@ const ModuleDetailsPage = () => {
                                                 <TableRow key={course._id}>
                                                     <TableCell className='border-r'>{course.title}</TableCell>
                                                     <TableCell className='border-r'>{course.subTitle}</TableCell>
-                                                    <TableCell className='border-r text-center'>
+                                                    <TableCell className='text-center'>
                                                         <div className="flex-col flex">
                                                             <span>{new Date(course.createdAt).toLocaleString('en', {
                                                                 year: "numeric",

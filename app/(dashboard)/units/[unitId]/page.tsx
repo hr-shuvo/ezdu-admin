@@ -122,12 +122,13 @@ const UnitDetailsPage = () => {
                         </div>
 
                         <div className="rounded-md border">
-                            <Table>
+                            <Table className='w-full border-collapse [&>tbody>tr:nth-child(even)]:bg-gray-50'>
                                 <TableHeader>
                                     <TableRow>
-                                        <TableHead>Title</TableHead>
-                                        <TableHead>Description</TableHead>
-                                        <TableHead>Actiion</TableHead>
+                                        <TableHead className='text-center'>Title</TableHead>
+                                        <TableHead className='text-center'>Description</TableHead>
+                                        <TableHead className='text-center'>Order</TableHead>
+                                        <TableHead className='text-center'>Action</TableHead>
                                     </TableRow>
                                 </TableHeader>
 
@@ -137,9 +138,10 @@ const UnitDetailsPage = () => {
 
                                             lessons.map((lesson: any) => (
                                                 <TableRow key={lesson._id}>
-                                                    <TableCell>{lesson.title}</TableCell>
-                                                    <TableCell>{lesson.description}</TableCell>
-                                                    <TableCell>
+                                                    <TableCell className='border-r'>{lesson.title}</TableCell>
+                                                    <TableCell className='border-r'>{lesson.description}</TableCell>
+                                                    <TableCell className='border-r'>{lesson.order}</TableCell>
+                                                    <TableCell className='border-r text-center'>
                                                         <div className="flex justify-center gap-1">
                                                             <Link href={`../lessons/${lesson._id}`}><Button variant='default'
                                                                 size='sm'><Eye /></Button></Link>
