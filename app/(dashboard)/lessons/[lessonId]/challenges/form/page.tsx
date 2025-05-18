@@ -53,7 +53,7 @@ const ChallengeCreatePage = () => {
     useEffect(() => {
         startTransition(async () => {
             const lessonId = Array.isArray(params.lessonId) ? params.lessonId[0] : params.lessonId;
-            setValue('lessonId', lessonId);
+            setValue('lessonId', lessonId??'');
 
             console.log(form.control);
         });
