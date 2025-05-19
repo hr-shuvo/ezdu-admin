@@ -73,11 +73,11 @@ const CourseDetailsPage = () => {
                                 </BreadcrumbItem>
                                 <BreadcrumbSeparator />
                                 <BreadcrumbItem>
-                                    <Link href="/dashboard" className="text-blue-500 hover:underline">Dashboard</Link>
+                                    <Link href="/modules" className="text-blue-500 hover:underline">Modules</Link>
                                 </BreadcrumbItem>
                                 <BreadcrumbSeparator />
                                 <BreadcrumbItem>
-                                    <Link href="./" className="text-blue-500 hover:underline">Courses</Link>
+                                    <Link href={`../modules/${course?.moduleId}`} className="text-blue-500 hover:underline">Courses</Link>
                                 </BreadcrumbItem>
                                 <BreadcrumbSeparator />
                                 <BreadcrumbItem>
@@ -106,7 +106,7 @@ const CourseDetailsPage = () => {
                 <div className="w-full my-5 p-5 border">
                     <div className="flex justify-between">
                         <div>
-                            <h1 className="text-lg">Unit List</h1>
+                            <h1 className="text-xl">Unit List</h1>
                         </div>
                         <div>
                             <Link href={`./${course?._id}/units/form`}>
@@ -127,6 +127,7 @@ const CourseDetailsPage = () => {
                             <Table className='w-full border-collapse [&>tbody>tr:nth-child(even)]:bg-gray-50'>
                                 <TableHeader>
                                     <TableRow>
+                                        <TableHead className='text-center'>Sl</TableHead>
                                         <TableHead className='text-center'>Title</TableHead>
                                         <TableHead className='text-center'>Description</TableHead>
                                         <TableHead className='text-center'>Order</TableHead>
@@ -138,11 +139,12 @@ const CourseDetailsPage = () => {
                                     {
                                         units.length ? (
 
-                                            units.map((unit: any) => (
+                                            units.map((unit: any, index) => (
                                                 <TableRow key={unit._id}>
+                                                    <TableCell className='border-r text-center'>{(currentPage-1)*pageSize+index+1}</TableCell>
                                                     <TableCell className='border-r'>{unit.title}</TableCell>
                                                     <TableCell className='border-r'>{unit.description}</TableCell>
-                                                    <TableCell className='border-r'>{unit.order}</TableCell>
+                                                    <TableCell className='border-r text-center'>{unit.order}</TableCell>
                                                     <TableCell className='border-r text-center'>
                                                         <div className="flex justify-center gap-1">
                                                             <Link href={`../units/${unit._id}`}><Button variant='default'

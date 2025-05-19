@@ -54,7 +54,7 @@ const UnitDetailsPage = () => {
                     <div className="flex justify-between">
                         <h1 className="text-4xl">Unit Details</h1>
                         <div className="gap-2 flex">
-                            <Link href={`../modules/${unit?.moduleId}`}>
+                            <Link href={`../courses/${unit?.courseId}`}>
                                 <Button size='sm'> <IoArrowBack /> <span>Back</span></Button>
                             </Link>
                             <Link href={`./form/${unit?._id}`}>
@@ -140,7 +140,7 @@ const UnitDetailsPage = () => {
                                                 <TableRow key={lesson._id}>
                                                     <TableCell className='border-r'>{lesson.title}</TableCell>
                                                     <TableCell className='border-r'>{lesson.description}</TableCell>
-                                                    <TableCell className='border-r'>{lesson.order}</TableCell>
+                                                    <TableCell className='border-r text-center'>{lesson.order}</TableCell>
                                                     <TableCell className='border-r text-center'>
                                                         <div className="flex justify-center gap-1">
                                                             <Link href={`../lessons/${lesson._id}`}><Button variant='default'
