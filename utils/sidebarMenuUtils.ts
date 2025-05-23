@@ -64,25 +64,25 @@ export const SidebarMenuList = {
             ],
         },
         {
-            title: "Documentation",
-            url: "#",
+            title: "Academy",
+            url: "academy",
             icon: BookOpen,
             items: [
                 {
-                    title: "Introduction",
-                    url: "#",
+                    title: "Class",
+                    url: "academy/classes",
                 },
                 {
-                    title: "Get Started",
-                    url: "#",
+                    title: "Subject",
+                    url: "academy/subjects",
                 },
                 {
-                    title: "Tutorials",
-                    url: "#",
+                    title: "Lesson",
+                    url: "academy/lessons",
                 },
                 {
-                    title: "Changelog",
-                    url: "#",
+                    title: "Lesson Content",
+                    url: "academy/lesson-content",
                 },
             ],
         },

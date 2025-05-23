@@ -1,6 +1,5 @@
 'use client';
 
-
 import {
     Breadcrumb,
     BreadcrumbItem,
@@ -19,14 +18,14 @@ import {
     TableHeader,
     TableRow
 } from "@/components/ui/table";
-import { Eye, Pencil, PlusCircle, Trash } from "lucide-react";
 import Link from "next/link";
+import Loading from "./loading";
+import CustomPagination from "@/components/common/pagination";
+import { Eye, Pencil, PlusCircle, Trash } from "lucide-react";
 import { useEffect, useState, useTransition } from "react";
 import { toast } from "sonner";
-import Loading from "./loading";
-import {PaginatedList} from "@/app/utils/pagination";
-import {loadModules} from "@/app/_services/modules-services";
-import CustomPagination from "@/components/common/pagination";
+import { PaginatedList } from "@/app/utils/pagination";
+import { loadModules } from "@/app/_services/modules-services";
 
 const DashboardModulesPage = () => {
     const [modules, setModules] = useState([]);
@@ -45,8 +44,7 @@ const DashboardModulesPage = () => {
                 setTotalCount(response.totalCount);
                 setTotalPage(response.totalPage);
                 setCurrentPage(response.currentPage);
-            }
-            catch {
+            } catch {
                 toast.error('error')
             }
         });
@@ -55,7 +53,7 @@ const DashboardModulesPage = () => {
 
 
     if (isPending) {
-        return <Loading />;
+        return <Loading/>;
     }
 
     return (
@@ -68,11 +66,11 @@ const DashboardModulesPage = () => {
                             <BreadcrumbItem>
                                 <Link href="/admin/public" className="text-blue-500 hover:underline">Home</Link>
                             </BreadcrumbItem>
-                            <BreadcrumbSeparator />
+                            <BreadcrumbSeparator/>
                             <BreadcrumbItem>
                                 <Link href="/dashboard" className="text-blue-500 hover:underline">Dashboard</Link>
                             </BreadcrumbItem>
-                            <BreadcrumbSeparator />
+                            <BreadcrumbSeparator/>
                             <BreadcrumbItem>
                                 <BreadcrumbPage>Modules</BreadcrumbPage>
                             </BreadcrumbItem>
@@ -88,7 +86,7 @@ const DashboardModulesPage = () => {
                     <div>
                         <Link href="./modules/form">
                             <Button size='sm' variant='sidebarOutline'>
-                                <PlusCircle /><span> Add</span>
+                                <PlusCircle/><span> Add</span>
                             </Button>
                         </Link>
 
@@ -97,7 +95,7 @@ const DashboardModulesPage = () => {
 
                 <div className="w-full">
                     <div className="flex items-center py-4">
-                        <Input placeholder="Search" className="max-w-sm" />
+                        <Input placeholder="Search" className="max-w-sm"/>
 
 
                     </div>
@@ -124,12 +122,13 @@ const DashboardModulesPage = () => {
                                                 <TableCell>
                                                     <div className="flex justify-center gap-1">
                                                         <Link href={`./modules/${module._id}`}><Button variant='default'
-                                                            size='sm'><Eye /></Button></Link>
+                                                                                                       size='sm'><Eye/></Button></Link>
 
-                                                        <Link href={`./modules/form/${module._id}`}><Button variant='default'
-                                                            size='sm'><span><Pencil /></span></Button></Link>
+                                                        <Link href={`./modules/form/${module._id}`}><Button
+                                                            variant='default'
+                                                            size='sm'><span><Pencil/></span></Button></Link>
                                                         <Link href={'#'}><Button variant='destructiveOutline'
-                                                            size='sm'><span><Trash /></span></Button></Link>
+                                                                                 size='sm'><span><Trash/></span></Button></Link>
 
 
                                                     </div>
@@ -157,14 +156,14 @@ const DashboardModulesPage = () => {
                     </div>
 
 
-
                     <div className="flex items-center justify-between space-x-2 py-4">
                         <div className="flex items-center text-sm text-muted-foreground gap-2">
                             <div>{totalCount} items found</div>
                             <div>
-                                <Select value={pageSize.toString()} onValueChange={(value) => setPageSize(Number(value))}>
+                                <Select value={pageSize.toString()}
+                                        onValueChange={(value) => setPageSize(Number(value))}>
                                     <SelectTrigger className="w-[100px]">
-                                        <SelectValue placeholder="Theme" />
+                                        <SelectValue placeholder="Theme"/>
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectItem value="5">5</SelectItem>
@@ -183,9 +182,6 @@ const DashboardModulesPage = () => {
                             />
                         </div>
                     </div>
-
-
-
 
 
                 </div>

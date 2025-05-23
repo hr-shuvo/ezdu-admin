@@ -1,5 +1,3 @@
-
-
 export interface PaginatedList {
     data: [],
     totalCount: number,

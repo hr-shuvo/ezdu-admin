@@ -14,7 +14,7 @@ interface Props {
 }
 
 
-const CustomPagination = ({ totalPage, currentPage, onPageChange }: Props) => {
+const CustomPagination = ({totalPage, currentPage, onPageChange}: Props) => {
     const getPageNumbers = () => {
         const pages = [];
         for (let i = 1; i <= totalPage; i++) {
@@ -27,19 +27,19 @@ const CustomPagination = ({ totalPage, currentPage, onPageChange }: Props) => {
         <>
             <Pagination>
                 <PaginationContent>
-                    
+
                     <PaginationItem>
                         <PaginationPrevious
                             href="#"
                             onClick={() => currentPage > 1 && onPageChange(currentPage - 1)}
                         />
                     </PaginationItem>
-                    
+
                     {getPageNumbers().map((page) => (
                         <PaginationItem key={page}>
                             <PaginationLink
                                 href="#"
-                                isActive={currentPage===page}
+                                isActive={currentPage === page}
                                 onClick={() => onPageChange(page)}
                             >
                                 {page}
