@@ -86,12 +86,12 @@ const DashboardCoursePage = () => {
                         </div>
 
                         <div className="rounded-md border">
-                            <Table>
+                            <Table className='w-full border-collapse [&>tbody>tr:nth-child(even)]:bg-gray-50'>
                                 <TableHeader>
                                     <TableRow>
                                         <TableHead>Title</TableHead>
                                         <TableHead>Modified At</TableHead>
-                                        <TableHead>Actiion</TableHead>
+                                        <TableHead>Action</TableHead>
                                     </TableRow>
                                 </TableHeader>
 

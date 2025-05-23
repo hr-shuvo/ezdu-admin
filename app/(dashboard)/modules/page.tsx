@@ -107,7 +107,7 @@ const DashboardModulesPage = () => {
                                     <TableHead>Title</TableHead>
                                     <TableHead>Subtitle</TableHead>
                                     <TableHead>Total course</TableHead>
-                                    <TableHead>Actiion</TableHead>
+                                    <TableHead>Action</TableHead>
                                 </TableRow>
                             </TableHeader>
 

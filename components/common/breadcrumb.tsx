@@ -5,6 +5,7 @@ import {
     BreadcrumbList,
     BreadcrumbSeparator
 } from "@/components/ui/breadcrumb";
+import React from "react";
 import { createContext, ReactNode, useContext, useState } from "react";
 
 
@@ -45,7 +46,7 @@ export const CustomBreadcrumb = () => {
                 <BreadcrumbList>
                     {
                         breadcrumbList.map((b, i) => (
-                            <>
+                            <React.Fragment key={i}>
                                 {i != 0 && (
                                     <BreadcrumbSeparator className="hidden md:block"/>
                                 )}
@@ -55,7 +56,7 @@ export const CustomBreadcrumb = () => {
                                         {b.title}
                                     </BreadcrumbLink>
                                 </BreadcrumbItem>
-                            </>
+                            </React.Fragment>
                         ))
                     }
 
