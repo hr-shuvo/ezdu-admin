@@ -12,6 +12,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import CustomPagination from "@/components/common/pagination";
 import { AcademicClassLevelType } from "@/utils/common";
+import { Label } from "@/components/ui/label";
 
 const AcademyClassPage = () => {
     const {setBreadcrumbList} = useBreadcrumb();
@@ -68,11 +69,12 @@ const AcademyClassPage = () => {
                     </div>
 
                     <div className="w-full">
-                        <div className="flex items-center py-4 gap-2">
+                        <div className="flex items-center py-4 gap-5">
                             <div>
                                 <Input placeholder="Search" className={'w-full min-w-[200px]'}/>
                             </div>
-                            <div>
+                            <div className='flex flex-row gap-2'>
+                                {/*<Label>Level</Label>*/}
                                 <Select onValueChange={(level) => setLevel(level)}>
                                     <SelectTrigger className={'w-full min-w-[200px]'}>
                                         <SelectValue placeholder='Choose Level'/>
@@ -129,11 +131,11 @@ const AcademyClassPage = () => {
                                                             <TableCell className='border-r'>{data.level}</TableCell>
                                                             <TableCell>
                                                                 <div className="flex justify-center gap-1">
-                                                                    <Link href={`../courses/${data._id}`}><Button
+                                                                    <Link href={`../classes/${data._id}`}><Button
                                                                         variant='default'
                                                                         size='sm'><Eye/></Button></Link>
 
-                                                                    <Link href={`./courses/form/${data._id}`}><Button
+                                                                    <Link href={`./classes/form/${data._id}`}><Button
                                                                         variant='default'
                                                                         size='sm'><span><Pencil/></span></Button></Link>
                                                                     <Link href={'#'}><Button

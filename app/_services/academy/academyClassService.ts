@@ -26,9 +26,9 @@ export const loadAcademicClass = async (page: number, size: number, level?: stri
     }
 };
 
-export const getAcademicClass = async (courseId?: any): Promise<any> => {
+export const getAcademyClass = async (id?: any): Promise<any> => {
     try {
-        const response = await httpClient.get<any>(`/courses/${courseId}`);
+        const response = await httpClient.get<any>(`/academy/classes/${id}`);
         // console.log(response)
 
         return response.data;
@@ -40,9 +40,9 @@ export const getAcademicClass = async (courseId?: any): Promise<any> => {
     }
 };
 
-export const upsertAcademicClass = async (module: any) => {
+export const upsertAcademyClass = async (model: any) => {
     try {
-        const response = await httpClient.post(`/courses/create`, module);
+        const response = await httpClient.post(`/academy/classes/upsert`, model);
 
         if (response.status === 201 || response.status === 200) {
             return {success: response.data};
