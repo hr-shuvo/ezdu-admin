@@ -20,23 +20,12 @@ export const SidebarMenuList = {
             logo: GalleryVerticalEnd,
             plan: "Dashboard | Admin",
         },
-        // {
-        //     name: "Acme Corp.",
-        //     logo: AudioWaveform,
-        //     plan: "Startup",
-        // },
-        // {
-        //     name: "Evil Corp.",
-        //     logo: Command,
-        //     plan: "Free",
-        // },
     ],
     navMain: [
         {
             title: "Playground",
             url: "#",
             icon: SquareTerminal,
-            isActive: true,
             items: [
                 {
                     title: "Dashboard",
@@ -70,19 +59,19 @@ export const SidebarMenuList = {
             items: [
                 {
                     title: "Class",
-                    url: "academy/classes",
+                    url: "/academy/classes"
                 },
                 {
                     title: "Subject",
-                    url: "academy/subjects",
+                    url: "/academy/subjects",
                 },
                 {
                     title: "Lesson",
-                    url: "academy/lessons",
+                    url: "/academy/lessons",
                 },
                 {
                     title: "Lesson Content",
-                    url: "academy/lesson-content",
+                    url: "/academy/lesson-content",
                 },
             ],
         },

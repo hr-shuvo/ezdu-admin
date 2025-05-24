@@ -12,8 +12,9 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import CustomPagination from "@/components/common/pagination";
 import { AcademicClassLevelType } from "@/utils/common";
+import { loadAcademicSubject } from "@/app/_services/academy/academySubjectService";
 
-const AcademyClassPage = () => {
+const AcademySubjectPage = () => {
     const {setBreadcrumbList} = useBreadcrumb();
 
     const [classes, setClasses] = useState([]);
@@ -24,29 +25,29 @@ const AcademyClassPage = () => {
     const [isPending, startTransition] = useTransition();
 
     const [level, setLevel] = useState('all');
+    const [classId, setClassId] = useState('');
 
     useEffect(() => {
         setBreadcrumbList([
             {title: 'Home', link: '/'},
-            {title: 'Classes', link: '/academy/classes'},
-            {title: 'Manage', link: '/academy/classes'},
+            {title: 'Subjects', link: '/academy/subjects'},
+            {title: 'Manage', link: '/academy/subjects'},
         ]);
 
     }, [setBreadcrumbList]);
 
     useEffect(() => {
         startTransition(async () => {
-            const response = await loadAcademicClass(currentPage, pageSize, level);
+            const response = await loadAcademicSubject(currentPage, pageSize, level, classId);
             setClasses(response.data);
             setTotalCount(response.totalCount);
             setTotalPage(response.totalPage);
             setCurrentPage(response.currentPage);
-        })
-    }, [currentPage, pageSize, level]);
 
-    // if (isPending) {
-    //     return <Loading/>
-    // }
+            console.log(response.data);
+        })
+    }, [currentPage, pageSize, level, classId]);
+    
 
     return (
         <>
@@ -55,7 +56,7 @@ const AcademyClassPage = () => {
 
                     <div className="flex justify-between mt-5">
                         <div>
-                            <h1 className="text-lg">Class List</h1>
+                            <h1 className="text-5xl font-bold">Subject List</h1>
                         </div>
                         <div>
                             <Link href="./classes/form">
@@ -88,19 +89,6 @@ const AcademyClassPage = () => {
 
                                 </Select>
                             </div>
-                            {/*<div>*/}
-                            {/*    <Select>*/}
-                            {/*        <SelectTrigger className={'w-full min-w-[200px]'}>*/}
-                            {/*            <SelectValue placeholder='Choose Level'/>*/}
-                            {/*        </SelectTrigger>*/}
-                            {/*        <SelectContent>*/}
-                            {/*            {AcademicClassLevelType.map((item) => (*/}
-                            {/*                <SelectItem value={item.value}>{item.text}</SelectItem>*/}
-                            {/*            ))}*/}
-                            {/*        </SelectContent>*/}
-
-                            {/*    </Select>*/}
-                            {/*</div>*/}
                         </div>
 
                         <div className="rounded-md border">
@@ -113,6 +101,7 @@ const AcademyClassPage = () => {
                                             <TableRow>
                                                 <TableHead className='text-center'>Sl</TableHead>
                                                 <TableHead className='text-center'>Title</TableHead>
+                                                <TableHead className='text-center'>Class</TableHead>
                                                 <TableHead className='text-center'>Level</TableHead>
                                                 <TableHead className='text-center'>Action</TableHead>
                                             </TableRow>
@@ -126,8 +115,9 @@ const AcademyClassPage = () => {
                                                         <TableRow key={data._id}>
                                                             <TableCell
                                                                 className='border-r text-center'>{(currentPage - 1) * pageSize + index + 1}</TableCell>
-                                                            <TableCell className='border-r'>{data.title}</TableCell>
-                                                            <TableCell className='border-r'>{data.level}</TableCell>
+                                                            <TableCell className='border-r '>{data.title}</TableCell>
+                                                            <TableCell className='border-r'>{data.academyClass.title}</TableCell>
+                                                            <TableCell className='border-r'>{data.academyClass.level}</TableCell>
                                                             <TableCell>
                                                                 <div className="flex justify-center gap-1">
                                                                     <Link href={`../classes/${data._id}`}><Button
@@ -205,4 +195,4 @@ const AcademyClassPage = () => {
 };
 
 
-export default AcademyClassPage;
+export default AcademySubjectPage;
