@@ -27,7 +27,7 @@ export const loadAcademicSubject = async (page: number, size: number, level?: st
     }
 };
 
-export const getAcademyClass = async (id?: any): Promise<any> => {
+export const getAcademySubject = async (id?: any): Promise<any> => {
     try {
         const response = await httpClient.get<any>(`/academy/subjects/${id}`);
         // console.log(response)
@@ -41,7 +41,7 @@ export const getAcademyClass = async (id?: any): Promise<any> => {
     }
 };
 
-export const upsertAcademyClass = async (model: any) => {
+export const upsertAcademySubject = async (model: any) => {
     try {
         const response = await httpClient.post(`/academy/subjects/upsert`, model);
 

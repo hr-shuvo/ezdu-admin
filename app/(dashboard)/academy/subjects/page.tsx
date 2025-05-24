@@ -3,7 +3,6 @@
 import { useEffect, useState, useTransition } from "react";
 import { useBreadcrumb } from "@/components/common/breadcrumb";
 import Loading from "@/app/(dashboard)/modules/loading";
-import { loadAcademicClass } from "@/app/_services/academy/academyClassService";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Eye, Pencil, PlusCircle, Trash } from "lucide-react";
@@ -13,11 +12,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import CustomPagination from "@/components/common/pagination";
 import { AcademicClassLevelType } from "@/utils/common";
 import { loadAcademicSubject } from "@/app/_services/academy/academySubjectService";
+import { loadAcademicClass } from "@/app/_services/academy/academyClassService";
+import { Badge } from "@/components/ui/badge";
 
 const AcademySubjectPage = () => {
     const {setBreadcrumbList} = useBreadcrumb();
 
-    const [classes, setClasses] = useState([]);
+    const [subjects, setSubjects] = useState([]);
     const [totalCount, setTotalCount] = useState(0);
     const [totalPage, setTotalPage] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
@@ -26,6 +27,8 @@ const AcademySubjectPage = () => {
 
     const [level, setLevel] = useState('all');
     const [classId, setClassId] = useState('');
+    const [classes, setClasses] = useState([]);
+
 
     useEffect(() => {
         setBreadcrumbList([
@@ -39,7 +42,7 @@ const AcademySubjectPage = () => {
     useEffect(() => {
         startTransition(async () => {
             const response = await loadAcademicSubject(currentPage, pageSize, level, classId);
-            setClasses(response.data);
+            setSubjects(response.data);
             setTotalCount(response.totalCount);
             setTotalPage(response.totalPage);
             setCurrentPage(response.currentPage);
@@ -47,7 +50,13 @@ const AcademySubjectPage = () => {
             console.log(response.data);
         })
     }, [currentPage, pageSize, level, classId]);
-    
+
+    useEffect(() => {
+        startTransition(async () => {
+            const response = await loadAcademicClass(1, 100, level);
+            setClasses(response.data);
+        })
+    }, [level]);
 
     return (
         <>
@@ -81,9 +90,29 @@ const AcademySubjectPage = () => {
                                     </SelectTrigger>
 
                                     <SelectContent>
-                                        <SelectItem value={'all'}>All</SelectItem>
+                                        <SelectItem value={'all'}>All Level</SelectItem>
                                         {AcademicClassLevelType.map((item) => (
                                             <SelectItem value={item.value} key={item.value}>{item.text}</SelectItem>
+                                        ))}
+                                    </SelectContent>
+
+                                </Select>
+                            </div>
+                            <div className='flex flex-row gap-2'>
+                                {/*<Label>Level</Label>*/}
+                                <Select onValueChange={(data) => {
+                                    if (data && data !== 'all') {
+                                        setClassId(data)
+                                    }
+                                }}>
+                                    <SelectTrigger className={'w-full min-w-[200px]'}>
+                                        <SelectValue placeholder='Choose Class'/>
+                                    </SelectTrigger>
+
+                                    <SelectContent>
+                                        <SelectItem value={'all'}>All Class</SelectItem>
+                                        {classes.map((item: { _id: string, title: string }) => (
+                                            <SelectItem value={item._id} key={item._id}>{item.title}</SelectItem>
                                         ))}
                                     </SelectContent>
 
@@ -103,28 +132,41 @@ const AcademySubjectPage = () => {
                                                 <TableHead className='text-center'>Title</TableHead>
                                                 <TableHead className='text-center'>Class</TableHead>
                                                 <TableHead className='text-center'>Level</TableHead>
+                                                <TableHead className='text-center'>Has Paper</TableHead>
                                                 <TableHead className='text-center'>Action</TableHead>
                                             </TableRow>
                                         </TableHeader>
 
                                         <TableBody>
                                             {
-                                                classes.length ? (
+                                                subjects.length ? (
 
-                                                    classes.map((data: any, index) => (
+                                                    subjects.map((data: any, index) => (
                                                         <TableRow key={data._id}>
                                                             <TableCell
                                                                 className='border-r text-center'>{(currentPage - 1) * pageSize + index + 1}</TableCell>
                                                             <TableCell className='border-r '>{data.title}</TableCell>
-                                                            <TableCell className='border-r'>{data.academyClass.title}</TableCell>
-                                                            <TableCell className='border-r'>{data.academyClass.level}</TableCell>
+                                                            <TableCell
+                                                                className='border-r'>{data.academyClass.title}</TableCell>
+                                                            <TableCell
+                                                                className='border-r'>{data.academyClass.level}</TableCell>
+                                                            <TableCell
+                                                                className='border-r text-center'>
+                                                                {
+                                                                    data.hasSubjectPaper ? (
+                                                                        <Badge className='bg-blue-400'>yes</Badge>
+                                                                    ) : (
+                                                                        <Badge className='bg-gray-400'>no</Badge>
+                                                                    )
+                                                                }
+                                                            </TableCell>
                                                             <TableCell>
                                                                 <div className="flex justify-center gap-1">
-                                                                    <Link href={`../classes/${data._id}`}><Button
-                                                                        variant='default'
-                                                                        size='sm'><Eye/></Button></Link>
+                                                                    {/*<Link href={`../subjects/${data._id}`}><Button*/}
+                                                                    {/*    variant='default'*/}
+                                                                    {/*    size='sm'><Eye/></Button></Link>*/}
 
-                                                                    <Link href={`./classes/form/${data._id}`}><Button
+                                                                    <Link href={`./subjects/form/${data._id}`}><Button
                                                                         variant='default'
                                                                         size='sm'><span><Pencil/></span></Button></Link>
                                                                     <Link href={'#'}><Button
