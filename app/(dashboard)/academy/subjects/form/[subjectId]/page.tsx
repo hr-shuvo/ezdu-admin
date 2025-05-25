@@ -137,7 +137,7 @@ const AcademySubjectEditPage = () => {
                         <h1 className="text-5xl font-bold">Edit - Academy Subject</h1>
                     </div>
                     <div>
-                        <Link href="./">
+                        <Link href="../">
                             <Button size='sm' variant='sidebarOutline'>
                                 <BiArrowBack/><span> Back</span>
                             </Button>
@@ -307,7 +307,7 @@ const AcademySubjectEditPage = () => {
                                             className="w-3/6"
                                             variant="super"
                                             disabled={isPending}
-                                            onClick={() => router.push('./')}
+                                            onClick={() => router.push('../')}
                                         >
                                             Cancel
                                         </Button>

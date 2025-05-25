@@ -68,7 +68,7 @@ const AcademySubjectPage = () => {
                             <h1 className="text-5xl font-bold">Subject List</h1>
                         </div>
                         <div>
-                            <Link href="./classes/form">
+                            <Link href="./subjects/form">
                                 <Button size='sm' variant='sidebarOutline'>
                                     <PlusCircle/><span> Add</span>
                                 </Button>
@@ -162,9 +162,9 @@ const AcademySubjectPage = () => {
                                                             </TableCell>
                                                             <TableCell>
                                                                 <div className="flex justify-center gap-1">
-                                                                    {/*<Link href={`../subjects/${data._id}`}><Button*/}
-                                                                    {/*    variant='default'*/}
-                                                                    {/*    size='sm'><Eye/></Button></Link>*/}
+                                                                    <Link href={`../subjects/${data._id}`}><Button
+                                                                        variant='default'
+                                                                        size='sm'><Eye/></Button></Link>
 
                                                                     <Link href={`./subjects/form/${data._id}`}><Button
                                                                         variant='default'

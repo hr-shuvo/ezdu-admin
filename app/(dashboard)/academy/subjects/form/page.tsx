@@ -1,7 +1,7 @@
 'use client'
 
-import { useRouter } from "next/navigation";
-import { useTransition } from "react";
+import { useParams, useRouter } from "next/navigation";
+import { useEffect, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -11,30 +11,89 @@ import { Button } from "@/components/ui/button";
 import { BiArrowBack } from "react-icons/bi";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { AcademyClassSchema } from "@/schemas/academy/academyClassSchema";
-import { upsertAcademyClass } from "@/app/_services/academy/academyClassService";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { AcademicClassLevelType } from "@/utils/common";
 import { Separator } from "@/components/ui/separator";
+import { AcademySubjectSchema } from "@/schemas/academy/academySubjectSchema";
+import {
+    getAcademySubject,
+    loadAcademicSubject,
+    upsertAcademySubject
+} from "@/app/_services/academy/academySubjectService";
+import { useBreadcrumb } from "@/components/common/breadcrumb";
+import { loadAcademicClass } from "@/app/_services/academy/academyClassService";
 
-const AcademyClassCreatePage = () => {
+const AcademySubjectEditPage = () => {
+    const params = useParams();
+    const {setBreadcrumbList} = useBreadcrumb();
+
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
 
-    const form = useForm<z.infer<typeof AcademyClassSchema>>({
-        resolver: zodResolver(AcademyClassSchema),
+    const [level, setLevel] = useState('PRIMARY');
+    const [classId, setClassId] = useState('');
+    const [classes, setClasses] = useState<any[]>([]);
+    const [subjects, setSubjects] = useState<any[]>([]);
+
+    useEffect(() => {
+        setBreadcrumbList([
+            {title: 'Home', link: '/'},
+            {title: 'Subjects', link: '/academy/subjects'},
+            {title: 'Edit', link: '/academy/subjects'},
+        ]);
+
+    }, [setBreadcrumbList]);
+
+    const form = useForm<z.infer<typeof AcademySubjectSchema>>({
+        resolver: zodResolver(AcademySubjectSchema),
         defaultValues: {
             title: "",
-            level: "",
+            subTitle: "",
+            hasSubjectPaper: false,
+            subjectId: undefined,
+            classId: "",
             // order: 1,
-            version: "BN",
         }
     });
 
-    const onSubmit = async (values: z.infer<typeof AcademyClassSchema>) => {
+    const {reset} = form;
+
+    useEffect(() => {
+        startTransition(async () => {
+            const _classes = await loadAcademicClass(1, 100, level);
+            setClasses(_classes.data);
+
+            const _subjects = await loadAcademicSubject(1, 100, level, classId);
+            setSubjects(_subjects.data.filter((s: any) => s._id !== params.subjectId));
+        });
+
+    }, [params.subjectId, reset]);
+
+    useEffect(() => {
+        startTransition(async () => {
+            const response = await loadAcademicClass(1, 100, level);
+            setClasses(response.data);
+        })
+    }, [level]);
+
+    useEffect(() => {
+        startTransition(async () => {
+            const _subjects = await loadAcademicSubject(1, 100, level, classId);
+            setSubjects(_subjects.data.filter((s: any) => s._id !== params.subjectId));
+        })
+    }, [classId]);
+
+
+    const onSubmit = async (values: z.infer<typeof AcademySubjectSchema>) => {
+
+        const normalizedValues = {
+            ...values,
+            subjectId: values.subjectId === "" || 'none' ? null : values.subjectId,
+            hasSubjectPaper: !(values.subjectId === "" || 'none')
+        }
 
         startTransition(async () => {
-            await upsertAcademyClass(values).then(res => {
+            await upsertAcademySubject(normalizedValues).then(res => {
                 if (res.success) {
                     toast.success(res.success, {
                         duration: 5000,
@@ -66,7 +125,7 @@ const AcademyClassCreatePage = () => {
 
                 <div className="flex justify-between">
                     <div>
-                        <h1 className="text-5xl font-bold">Create - Academy Class</h1>
+                        <h1 className="text-5xl font-bold">Create - Academy Subject</h1>
                     </div>
                     <div>
                         <Link href="./">
@@ -86,7 +145,7 @@ const AcademyClassCreatePage = () => {
                         <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
                             <div className="grid grid-cols-4 gap-4">
 
-                                <div className='col-span-4 md:col-span-2'>
+                                <div className='col-span-4 md:col-span-2 mt-2'>
                                     <FormField
                                         control={form.control}
                                         name="title"
@@ -107,27 +166,81 @@ const AcademyClassCreatePage = () => {
                                     />
                                 </div>
 
-                                <div className='col-span-4 md:col-span-1'>
+                                <div className='col-span-4 md:col-span-2 mt-2'>
                                     <FormField
                                         control={form.control}
-                                        name="level"
+                                        name="subTitle"
                                         render={({field}) => (
                                             <FormItem>
-                                                <FormLabel>Select Level *</FormLabel>
+                                                <FormLabel>Subtitle</FormLabel>
+                                                <FormControl>
+                                                    <Input
+                                                        {...field}
+                                                        placeholder="Enter title"
+                                                        type="text"
+                                                        disabled={isPending}
+                                                    />
+                                                </FormControl>
+                                                <FormMessage/>
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
+
+                                <div className='col-span-4 md:col-span-1 mt-2'>
+                                    <FormItem>
+                                        <FormLabel>Select Level</FormLabel>
+                                        <Select
+                                            disabled={isPending}
+                                            value={level}
+                                            onValueChange={(level) => setLevel(level)}
+                                        >
+                                            <SelectTrigger className={'w-full'}>
+                                                <SelectValue placeholder={"Select Level"}/>
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                {
+                                                    AcademicClassLevelType.map((item) => (
+                                                        <SelectItem value={item.value}
+                                                                    key={item.value}>{item.text}</SelectItem>
+                                                    ))
+                                                }
+
+                                            </SelectContent>
+
+                                        </Select>
+
+                                    </FormItem>
+
+
+                                </div>
+
+                                <div className='col-span-4 md:col-span-1 mt-2'>
+                                    <FormField
+                                        control={form.control}
+                                        name="classId"
+                                        render={({field}) => (
+                                            <FormItem>
+                                                <FormLabel>Select Class</FormLabel>
                                                 <Select
                                                     name={field.name}
-                                                    onValueChange={field.onChange}
+                                                    onValueChange={val =>{
+                                                        field.onChange(val);
+                                                        setClassId(val)
+                                                    }}
                                                     value={field.value}
                                                     disabled={isPending}
                                                 >
                                                     <SelectTrigger className={'w-full'}>
-                                                        <SelectValue placeholder={"Select Level"}/>
+                                                        <SelectValue
+                                                            placeholder={"Select Class"}
+                                                        />
                                                     </SelectTrigger>
                                                     <SelectContent>
                                                         {
-                                                            AcademicClassLevelType.map((item) => (
-                                                                <SelectItem value={item.value}
-                                                                            key={item.value}>{item.text}</SelectItem>
+                                                            classes.map((item: { _id: string, title: string }) => (
+                                                                <SelectItem value={item._id}
+                                                                            key={item._id}>{item.title}</SelectItem>
                                                             ))
                                                         }
 
@@ -141,13 +254,13 @@ const AcademyClassCreatePage = () => {
 
                                 </div>
 
-                                <div className='col-span-4 md:col-span-1'>
+                                <div className='col-span-4 md:col-span-1 mt-2'>
                                     <FormField
                                         control={form.control}
-                                        name="version"
+                                        name="subjectId"
                                         render={({field}) => (
                                             <FormItem>
-                                                <FormLabel>Select Version</FormLabel>
+                                                <FormLabel>Select Parent Subject</FormLabel>
                                                 <Select
                                                     name={field.name}
                                                     onValueChange={field.onChange}
@@ -155,11 +268,18 @@ const AcademyClassCreatePage = () => {
                                                     disabled={isPending}
                                                 >
                                                     <SelectTrigger className={'w-full'}>
-                                                        <SelectValue placeholder={"Select Version"}/>
+                                                        <SelectValue
+                                                            placeholder={"Select Subject"}
+                                                        />
                                                     </SelectTrigger>
                                                     <SelectContent>
-                                                        <SelectItem value={"BN"}>Bangla</SelectItem>
-                                                        <SelectItem value={"EN"}>English</SelectItem>
+                                                        <SelectItem value={'none'}>None</SelectItem>
+                                                        {
+                                                            subjects.map((item: { _id: string, title: string }) => (
+                                                                <SelectItem value={item._id}
+                                                                            key={item._id}>{item.title}</SelectItem>
+                                                            ))
+                                                        }
 
                                                     </SelectContent>
 
@@ -188,17 +308,11 @@ const AcademyClassCreatePage = () => {
                                             variant="secondary"
                                             disabled={isPending}
                                         >
-                                            Create
+                                            Update
                                         </Button>
                                     </div>
 
                                 </div>
-
-
-
-
-
-
 
                             </div>
 
@@ -214,4 +328,4 @@ const AcademyClassCreatePage = () => {
 
 }
 
-export default AcademyClassCreatePage;
+export default AcademySubjectEditPage;
