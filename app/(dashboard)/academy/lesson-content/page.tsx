@@ -49,13 +49,12 @@ const AcademyLessonContentPage = () => {
     useEffect(() => {
             startTransition(async () => {
                 const response = await loadAcademicLessonContent(currentPage, pageSize, lessonId);
-                setLessons(response.data);
+                setLessonContents(response.data);
                 setTotalCount(response.totalCount);
                 setTotalPage(response.totalPage);
-                setCurrentPage(response.currentPage);
-    
+                setCurrentPage(response.currentPage);    
             })
-        }, [currentPage, pageSize, level, subjectId]);
+        }, [currentPage, pageSize, level, lessonId]);
     
 
     useEffect(() => {
@@ -71,6 +70,16 @@ const AcademyLessonContentPage = () => {
                 setSubjects(response.data);
             })
         }, [classId]);
+    
+        useEffect(() => {
+            if(subjectId){
+
+            }
+            startTransition(async () => {
+                const response = await loadAcademicLesson(1, 100, subjectId);
+                setLessons(response.data);
+            })
+        }, [subjectId]);
 
 
     return (
@@ -157,6 +166,28 @@ const AcademyLessonContentPage = () => {
                                 </Select>
                             </div>
 
+                            <div className='flex flex-row gap-2'>
+                                {/*<Label>Level</Label>*/}
+                                <Select onValueChange={(data) => {
+                                    if (data && data !== 'all') {
+                                        setLessonId(data)
+                                    }else{
+                                        setLessonId(null!)}
+                                }}>
+                                    <SelectTrigger className={'w-full min-w-[200px]'}>
+                                        <SelectValue placeholder='Choose Lesson'/>
+                                    </SelectTrigger>
+
+                                    <SelectContent>
+                                        <SelectItem value={'all'}>All Lesson</SelectItem>
+                                        {lessons.map((item: { _id: string, title: string }) => (
+                                            <SelectItem value={item._id} key={item._id}>{item.title}</SelectItem>
+                                        ))}
+                                    </SelectContent>
+
+                                </Select>
+                            </div>
+
 
                         </div>
 
@@ -176,9 +207,9 @@ const AcademyLessonContentPage = () => {
 
                                         <TableBody>
                                             {
-                                                lessons.length ? (
+                                                lessonContents.length ? (
 
-                                                    lessons.map((data: any, index) => (
+                                                    lessonContents.map((data: any, index) => (
                                                         <TableRow key={data._id}>
                                                             <TableCell
                                                                 className='border-r text-center'>{(currentPage - 1) * pageSize + index + 1}</TableCell>
