@@ -89,7 +89,7 @@ const AcademyLessonContentPage = () => {
 
                     <div className="flex justify-between mt-5">
                         <div>
-                            <h1 className="text-5xl font-bold">Lesson List</h1>
+                            <h1 className="text-5xl font-bold">Lesson Content List</h1>
                         </div>
                         <div>
                             <Link href="./lessons/form">
@@ -201,6 +201,7 @@ const AcademyLessonContentPage = () => {
                                             <TableRow>
                                                 <TableHead className='text-center'>Sl</TableHead>
                                                 <TableHead className='text-center'>Title</TableHead>
+                                                <TableHead className='text-center'>Lesson</TableHead>
                                                 <TableHead className='text-center'>Action</TableHead>
                                             </TableRow>
                                         </TableHeader>
@@ -214,6 +215,7 @@ const AcademyLessonContentPage = () => {
                                                             <TableCell
                                                                 className='border-r text-center'>{(currentPage - 1) * pageSize + index + 1}</TableCell>
                                                             <TableCell className='border-r '>{data.title}</TableCell>
+                                                            <TableCell className='border-r '>{data.lesson.title}</TableCell>
 
                                                             <TableCell>
                                                                 <div className="flex justify-center gap-1">
