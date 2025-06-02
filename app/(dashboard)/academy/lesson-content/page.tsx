@@ -219,11 +219,11 @@ const AcademyLessonContentPage = () => {
 
                                                             <TableCell>
                                                                 <div className="flex justify-center gap-1">
-                                                                    <Link href={`../lessons/${data._id}`}><Button
+                                                                    <Link href={`../lesson-content/${data._id}`}><Button
                                                                         variant='default'
                                                                         size='sm'><Eye/></Button></Link>
 
-                                                                    <Link href={`./lessons/form/${data._id}`}><Button
+                                                                    <Link href={`./lesson-content/form/${data._id}`}><Button
                                                                         variant='default'
                                                                         size='sm'><span><Pencil/></span></Button></Link>
                                                                     <Link href={'#'}><Button
