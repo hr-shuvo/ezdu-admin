@@ -14,8 +14,6 @@ export const loadAcademicLessonContent = async (page: number, size: number, less
             params.lessonId = lessonId;
         }
 
-        console.log(params)
-
         const response = await httpClient.get<PaginatedList>("/academy/c", {params: params});
 
         return response.data;

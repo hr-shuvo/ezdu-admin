@@ -92,7 +92,7 @@ const AcademyLessonContentPage = () => {
                             <h1 className="text-5xl font-bold">Lesson Content List</h1>
                         </div>
                         <div>
-                            <Link href="./lessons/form">
+                            <Link href="./lesson-content/form">
                                 <Button size='sm' variant='sidebarOutline'>
                                     <PlusCircle/><span> Add</span>
                                 </Button>
