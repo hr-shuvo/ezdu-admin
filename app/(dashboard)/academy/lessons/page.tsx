@@ -6,6 +6,7 @@ import Loading from "@/app/(dashboard)/modules/loading";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Eye, Pencil, PlusCircle, Trash } from "lucide-react";
+import { TiTick } from "react-icons/ti";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -16,7 +17,7 @@ import { loadAcademicClass } from "@/app/_services/academy/academyClassService";
 import { loadAcademicSubject } from "@/app/_services/academy/academySubjectService";
 
 const AcademyLessonPage = () => {
-    const {setBreadcrumbList} = useBreadcrumb();
+    const { setBreadcrumbList } = useBreadcrumb();
 
     const [lessons, setLessons] = useState([]);
     const [totalCount, setTotalCount] = useState(0);
@@ -34,9 +35,9 @@ const AcademyLessonPage = () => {
 
     useEffect(() => {
         setBreadcrumbList([
-            {title: 'Home', link: '/'},
-            {title: 'Lessons', link: '/academy/lessons'},
-            {title: 'Manage', link: '/academy/lessons'},
+            { title: 'Home', link: '/' },
+            { title: 'Lessons', link: '/academy/lessons' },
+            { title: 'Manage', link: '/academy/lessons' },
         ]);
 
     }, [setBreadcrumbList]);
@@ -78,7 +79,7 @@ const AcademyLessonPage = () => {
                         <div>
                             <Link href="./lessons/form">
                                 <Button size='sm' variant='sidebarOutline'>
-                                    <PlusCircle/><span> Add</span>
+                                    <PlusCircle /><span> Add</span>
                                 </Button>
                             </Link>
 
@@ -88,13 +89,13 @@ const AcademyLessonPage = () => {
                     <div className="w-full">
                         <div className="flex items-center py-4 gap-5">
                             <div>
-                                <Input placeholder="Search" className={'w-full min-w-[200px]'}/>
+                                <Input placeholder="Search" className={'w-full min-w-[200px]'} />
                             </div>
                             <div className='flex flex-row gap-2'>
                                 {/*<Label>Level</Label>*/}
                                 <Select onValueChange={(level) => setLevel(level)}>
                                     <SelectTrigger className={'w-full min-w-[200px]'}>
-                                        <SelectValue placeholder='Choose Level'/>
+                                        <SelectValue placeholder='Choose Level' />
                                     </SelectTrigger>
 
                                     <SelectContent>
@@ -115,7 +116,7 @@ const AcademyLessonPage = () => {
                                     }
                                 }}>
                                     <SelectTrigger className={'w-full min-w-[200px]'}>
-                                        <SelectValue placeholder='Choose Class'/>
+                                        <SelectValue placeholder='Choose Class' />
                                     </SelectTrigger>
 
                                     <SelectContent>
@@ -133,11 +134,12 @@ const AcademyLessonPage = () => {
                                 <Select onValueChange={(data) => {
                                     if (data && data !== 'all') {
                                         setSubjectId(data)
-                                    }else{
-                                        setSubjectId(null!)}
+                                    } else {
+                                        setSubjectId(null!)
+                                    }
                                 }}>
                                     <SelectTrigger className={'w-full min-w-[200px]'}>
-                                        <SelectValue placeholder='Choose Subject'/>
+                                        <SelectValue placeholder='Choose Subject' />
                                     </SelectTrigger>
 
                                     <SelectContent>
@@ -156,7 +158,7 @@ const AcademyLessonPage = () => {
                         <div className="rounded-md border">
                             {
                                 isPending ? (
-                                    <Loading/>
+                                    <Loading />
                                 ) : (
                                     <Table className='w-full border [&>tbody>tr:nth-child(even)]:bg-gray-50'>
                                         <TableHeader>
@@ -181,14 +183,22 @@ const AcademyLessonPage = () => {
                                                                 <div className="flex justify-center gap-1">
                                                                     <Link href={`../lessons/${data._id}`}><Button
                                                                         variant='default'
-                                                                        size='sm'><Eye/></Button></Link>
+                                                                        size='sm'><Eye /></Button></Link>
 
                                                                     <Link href={`./lessons/form/${data._id}`}><Button
                                                                         variant='default'
-                                                                        size='sm'><span><Pencil/></span></Button></Link>
+                                                                        size='sm'><span><Pencil /></span></Button></Link>
+
                                                                     <Link href={'#'}><Button
                                                                         variant='destructiveOutline'
-                                                                        size='sm'><span><Trash/></span></Button></Link>
+                                                                        size='sm'><span><Trash /></span></Button></Link>
+
+                                                                    <Link href={`./lessons/mcq?subjectId=${subjectId}&lessonId=${data._id}`}><Button
+                                                                        variant='secondary'
+                                                                        size='sm'>
+                                                                        <span><TiTick /></span> MCQ
+                                                                    </Button>
+                                                                    </Link>
 
 
                                                                 </div>
@@ -221,9 +231,9 @@ const AcademyLessonPage = () => {
                                 <div>{totalCount} items found</div>
                                 <div>
                                     <Select value={pageSize.toString()}
-                                            onValueChange={(value) => setPageSize(Number(value))}>
+                                        onValueChange={(value) => setPageSize(Number(value))}>
                                         <SelectTrigger className="w-[100px]">
-                                            <SelectValue placeholder="Theme"/>
+                                            <SelectValue placeholder="Theme" />
                                         </SelectTrigger>
                                         <SelectContent>
                                             <SelectItem value="5">5</SelectItem>
