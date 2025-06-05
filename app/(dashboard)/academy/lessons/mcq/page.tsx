@@ -122,7 +122,7 @@ const AcademyMcqPage = () => {
                             <h1 className="text-lg">Mcq List</h1>
                         </div>
                         <div>
-                            <Link href={`../lessons/${lesson?._id}/challenges/form`}>
+                            <Link href={`./mcq/form?lessonId=${lessonId}&subjectId=${subjectId}`}>
                                 <Button size='sm' variant='sidebarOutline'>
                                     <PlusCircle /><span> Add</span>
                                 </Button>

@@ -1,43 +1,34 @@
-
-
-
 "use client";
 
-import { getChallenge, upsertChallenge } from "@/app/_services/challenge-service";
-import {
-    Breadcrumb,
-    BreadcrumbItem,
-    BreadcrumbList,
-    BreadcrumbPage,
-    BreadcrumbSeparator
-} from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { ChallengeSchema } from "@/schemas/challengeSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Minus, Plus } from "lucide-react";
 import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
-import { useEffect, useTransition } from "react";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState, useTransition } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { BiArrowBack } from "react-icons/bi";
 import * as z from "zod";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { AcademyMcqSchema } from "@/schemas/academy/academyMcqSchema";
+import { upsertAcademyMcq } from "@/app/_services/academy/academyMcqService";
 import { toast } from "sonner";
+import { Textarea } from "@/components/ui/textarea";
 
 const AcademyMcqCreatePage = () => {
-    const params = useParams();
-
+    const searchParams = useSearchParams();
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
 
-    const form = useForm<z.infer<typeof ChallengeSchema>>({
-        resolver: zodResolver(ChallengeSchema),
+    const lessonId = searchParams.get('lessonId');
+    const subjectId = searchParams.get('subjectId');
+
+    const form = useForm<z.infer<typeof AcademyMcqSchema>>({
+        resolver: zodResolver(AcademyMcqSchema),
         defaultValues: {
             question: "",
-            type: 'SELECT',
             order: 1,
             optionList: [
                 {text: "", correct: false},
@@ -46,29 +37,24 @@ const AcademyMcqCreatePage = () => {
         }
     });
 
-    const {fields: optionFields, append, remove} = useFieldArray({
+    const { fields: optionFields, append, remove } = useFieldArray({
         control: form.control,
         name: "optionList"
     });
 
-    const {reset, setValue} = form;
+    const { reset, setValue } = form;
 
     useEffect(() => {
-        startTransition(async () => {
-            const lessonId = Array.isArray(params.lessonId) ? params.lessonId[0] : params.lessonId;
-            setValue('lessonId', lessonId??'');
-
-            console.log(form.control);
-        });
-
-    }, [params.lessonId, reset]);
+        setValue('lessonId', lessonId!);
+        setValue('subjectId', subjectId!);
+    }, []);
 
 
-    const onSubmit = (values: z.infer<typeof ChallengeSchema>) => {
-        // console.log(values);
+    const onSubmit = (values: z.infer<typeof AcademyMcqSchema>) => {
+        // console.log('upsert mcq: ', values);
 
         startTransition(async () => {
-            await upsertChallenge(values).then(res => {
+            await upsertAcademyMcq(values).then(res => {
                 if (res.success) {
                     toast.success(res.success, {
                         duration: 5000,
@@ -95,13 +81,14 @@ const AcademyMcqCreatePage = () => {
 
     const onInvalid = (err: any) => {
         let msg = "Please add some option";
+        console.error(err)
 
         if (err && err.optionList && err.optionList.message) {
             msg = err.optionList.message;
-        }else if(err && err.optionList && err.optionList.root && err.optionList.root.message) {
+        } else if (err && err.optionList && err.optionList.root && err.optionList.root.message) {
             msg = err.optionList.root.message;
         }
-        else if(err && err.optionList && Array.isArray(err.optionList) && err.optionList.length > 0) {
+        else if (err && err.optionList && Array.isArray(err.optionList) && err.optionList.length > 0) {
             msg = err.optionList[0].text.message;
         }
 
@@ -118,37 +105,14 @@ const AcademyMcqCreatePage = () => {
     return (
         <>
             <div className="w-full my-5 p-5 border">
-
-                <div className="my-5">
-                    <Breadcrumb>
-                        <BreadcrumbList>
-                            <BreadcrumbItem>
-                                <Link href="/" className="text-blue-500 hover:underline">Home</Link>
-                            </BreadcrumbItem>
-                            <BreadcrumbSeparator/>
-                            <BreadcrumbItem>
-                                <Link href="/dashboard" className="text-blue-500 hover:underline">Dashboard</Link>
-                            </BreadcrumbItem>
-                            <BreadcrumbSeparator/>
-                            <BreadcrumbItem>
-                                <Link href="./" className="text-blue-500 hover:underline">Challenges</Link>
-                            </BreadcrumbItem>
-                            <BreadcrumbSeparator/>
-                            <BreadcrumbItem>
-                                <BreadcrumbPage>Create</BreadcrumbPage>
-                            </BreadcrumbItem>
-                        </BreadcrumbList>
-                    </Breadcrumb>
-                </div>
-
                 <div className="flex justify-between">
                     <div>
                         <h1 className="text-lg">Challenge Create</h1>
                     </div>
                     <div>
-                        <Link href="../">
+                        <Link href="../..">
                             <Button size='sm' variant='sidebarOutline'>
-                                <BiArrowBack/><span> Back</span>
+                                <BiArrowBack /><span> Back</span>
                             </Button>
                         </Link>
 
@@ -158,52 +122,49 @@ const AcademyMcqCreatePage = () => {
                 <div className="w-full">
                     <Form {...form}>
                         <form onSubmit={form.handleSubmit(onSubmit, onInvalid)} className='space-y-4'>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <FormField
-                                    control={form.control}
-                                    name="question"
-                                    render={({field}) => (
-                                        <FormItem>
-                                            <FormLabel>Title</FormLabel>
-                                            <FormControl>
-                                                <Input
-                                                    {...field}
-                                                    placeholder="Enter title"
-                                                    type="text"
-                                                    disabled={isPending}
-                                                />
-                                            </FormControl>
-                                            <FormMessage/>
-                                        </FormItem>
-                                    )}
-                                />
+                            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
 
-                                <FormField
-                                    control={form.control}
-                                    name="type"
-                                    render={({field}) => (
-                                        <FormItem>
-                                            <FormLabel>Type - Select | Assist</FormLabel>
-                                            <Select
-                                                name={field.name}
-                                                onValueChange={field.onChange}
-                                                value={field.value}
-                                                disabled={isPending}
-                                            >
-                                                <SelectTrigger>
-                                                    <SelectValue placeholder={"Select Type"}/>
-                                                </SelectTrigger>
-                                                <SelectContent>
-                                                    <SelectItem value={"SELECT"}>SELECT</SelectItem>
-                                                    <SelectItem value={"ASSIST"}>ASSIST</SelectItem>
+                                <div className="md:col-span-2">
+                                    <FormField
+                                        control={form.control}
+                                        name="question"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Question</FormLabel>
+                                                <FormControl>
+                                                    <Input
+                                                        {...field}
+                                                        placeholder="Enter title"
+                                                        type="text"
+                                                        disabled={isPending}
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
 
-                                                </SelectContent>
+                                <div className="col-span-4">
+                                    <FormField
+                                        control={form.control}
+                                        name="description"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Description</FormLabel>
+                                                <FormControl>
+                                                    <Textarea
+                                                        {...field}
+                                                        placeholder="Enter title"
+                                                        disabled={isPending}
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
 
-                                            </Select>
-
-                                        </FormItem>
-                                    )}
-                                />
 
                                 <div className="col-span-2">
                                     <FormLabel>
@@ -215,7 +176,7 @@ const AcademyMcqCreatePage = () => {
                                                 <FormField
                                                     control={form.control}
                                                     name={`optionList.${index}.text`}
-                                                    render={({field}) => (
+                                                    render={({ field }) => (
                                                         <FormItem className="w-full">
                                                             <FormControl>
                                                                 <Input
@@ -225,7 +186,7 @@ const AcademyMcqCreatePage = () => {
                                                                     disabled={isPending}
                                                                 />
                                                             </FormControl>
-                                                            <FormMessage/>
+                                                            <FormMessage />
                                                         </FormItem>
                                                     )}
                                                 />
@@ -233,7 +194,7 @@ const AcademyMcqCreatePage = () => {
                                                 <FormField
                                                     control={form.control}
                                                     name={`optionList.${index}.correct`}
-                                                    render={({field}) => (
+                                                    render={({ field }) => (
                                                         <FormItem className="flex items-center gap-2 p-1">
                                                             <FormControl>
                                                                 <Checkbox
@@ -253,7 +214,7 @@ const AcademyMcqCreatePage = () => {
                                                     disabled={optionFields.length <= 2 || isPending}
                                                     onClick={() => remove(index)}
                                                 >
-                                                    <Minus className="h-4 w-4"/>
+                                                    <Minus className="h-4 w-4" />
                                                 </Button>
 
                                             </div>
@@ -262,10 +223,10 @@ const AcademyMcqCreatePage = () => {
                                         <Button
                                             type="button"
                                             variant="outline"
-                                            onClick={() => append({text: "", correct: false})}
+                                            onClick={() => append({ text: "", correct: false })}
                                             disabled={isPending}
                                         >
-                                            <Plus className="h-4 w-4 mr-2"/> Add Option
+                                            <Plus className="h-4 w-4 mr-2" /> Add Option
                                         </Button>
 
 
@@ -274,34 +235,41 @@ const AcademyMcqCreatePage = () => {
                                 </div>
 
 
-                                <div className="col-span-2 mt-5 flex justify-end gap-2">
-                                    <Button
-                                        type="button"
-                                        className="w-3/6"
-                                        variant="super"
-                                        disabled={isPending}
-                                        onClick={() => router.push('..')}
-                                    >
-                                        Cancel
-                                    </Button>
-                                    <Button
-                                        type="submit"
-                                        className="w-3/6"
-                                        variant="secondary"
-                                        disabled={isPending}
-                                    >
-                                        Create
-                                    </Button>
+
+                                <div className="col-span-4 mt-5">
+                                    <div className="flex flex-col sm:flex-row justify-end gap-2">
+                                        <Button
+                                            type="button"
+                                            className="w-full"
+                                            variant="super"
+                                            disabled={isPending}
+                                            onClick={() => router.push('../..')}
+                                        >
+                                            Cancel
+                                        </Button>
+                                        <Button
+                                            type="submit"
+                                            className="w-full"
+                                            variant="secondary"
+                                            disabled={isPending}
+                                        >
+                                            Update
+                                        </Button>
+
+                                    </div>
                                 </div>
 
 
                             </div>
+
 
                         </form>
 
                     </Form>
 
                 </div>
+
+
 
 
             </div>
