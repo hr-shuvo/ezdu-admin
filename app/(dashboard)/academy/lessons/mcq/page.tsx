@@ -143,7 +143,7 @@ const AcademyMcqPage = () => {
                                         <TableHead className='text-center'>Sl</TableHead>
                                         <TableHead className='text-center'>Question</TableHead>
                                         <TableHead className='text-center'>Options</TableHead>
-                                        <TableHead className='text-center'>type</TableHead>
+                                        <TableHead className='text-center'>Description</TableHead>
                                         <TableHead className='text-center'>Action</TableHead>
                                     </TableRow>
                                 </TableHeader>
@@ -164,7 +164,7 @@ const AcademyMcqPage = () => {
                                                                     <div key={data._id}
                                                                         className='flex flex-col gap-y-1'>
                                                                         <Badge
-                                                                            className={option.correct ? 'bg-green-500' : 'bg-orange-500'}>{option.text}</Badge>
+                                                                            className={option.correct ? 'bg-green-500' : 'bg-gray-500'}>{option.text}</Badge>
                                                                     </div>
                                                                 ))
                                                             ) :
@@ -173,17 +173,17 @@ const AcademyMcqPage = () => {
                                                                 )}
                                                         </div>
                                                     </TableCell>
-                                                    <TableCell className='border-r'>{data.type}</TableCell>
+                                                    <TableCell className='border-r'>{data.description}</TableCell>
                                                     <TableCell className='text-center'>
                                                         <div className="flex justify-center gap-1">
                                                             <Link href={`../challenges/${data._id}`}><Button
                                                                 variant='default'
                                                                 size='sm'><Eye /></Button></Link>
 
-                                                            <Link
-                                                                href={`./${data.lessonId}/challenges/form/${data._id}`}><Button
+                                                            <Link href={`./mcq/form/${data._id}?lessonId=${lessonId}`}><Button
                                                                     variant='default'
                                                                     size='sm'><span><Pencil /></span></Button></Link>
+
                                                             <Link href={'#'}><Button variant='destructiveOutline'
                                                                 size='sm'><span><Trash /></span></Button></Link>
 

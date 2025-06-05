@@ -5,10 +5,10 @@ export const AcademyMcqSchema = z.object({
     question: z.string().min(1, {
         message: "Question is required",
     }),
-    order: z.number().default(1),
+    order: z.number().optional(),
     subjectId: z.string(),
     lessonId: z.string(),
-    description: z.string(),    
+    description: z.string().optional(),    
 
     optionList: z
         .array(
