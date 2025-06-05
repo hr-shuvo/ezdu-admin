@@ -153,18 +153,18 @@ const AcademyMcqPage = () => {
                                         mcqList.length ? (
 
                                             mcqList.map((data: any, index) => (
-                                                <TableRow key={data._id}>
+                                                <TableRow key={index}>
                                                     <TableCell
                                                         className='border-r text-center'>{(currentPage - 1) * pageSize + index + 1}</TableCell>
                                                     <TableCell className='border-r'>{data.question}</TableCell>
                                                     <TableCell className='border-r'>
                                                         <div>
                                                             {data.optionList.length ? (
-                                                                data.optionList.map((option: any) => (
-                                                                    <div key={data._id}
+                                                                data.optionList.map((option: any, optIdx:number) => (
+                                                                    <div key={optIdx}
                                                                         className='flex flex-col gap-y-1'>
                                                                         <Badge
-                                                                            className={option.correct ? 'bg-green-500' : 'bg-gray-500'}>{option.text}</Badge>
+                                                                            className={option.correct ? 'bg-green-500 w-full my-1' : 'bg-gray-500 w-full'}>{option.text}</Badge>
                                                                     </div>
                                                                 ))
                                                             ) :

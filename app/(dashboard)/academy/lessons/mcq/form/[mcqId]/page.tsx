@@ -111,10 +111,10 @@ const AcademyMcqEditPage = () => {
             <div className="w-full my-5 p-5 border">
                 <div className="flex justify-between">
                     <div>
-                        <h1 className="text-lg">Challenge Create</h1>
+                        <h1 className="text-lg">MCQ Update</h1>
                     </div>
                     <div>
-                        <Link href="../..">
+                        <Link href="..">
                             <Button size='sm' variant='sidebarOutline'>
                                 <BiArrowBack /><span> Back</span>
                             </Button>
@@ -226,7 +226,7 @@ const AcademyMcqEditPage = () => {
 
                                         <Button
                                             type="button"
-                                            variant="outline"
+                                            variant="default"
                                             onClick={() => append({ text: "", correct: false })}
                                             disabled={isPending}
                                         >
@@ -247,7 +247,7 @@ const AcademyMcqEditPage = () => {
                                             className="w-full"
                                             variant="super"
                                             disabled={isPending}
-                                            onClick={() => router.push('../..')}
+                                            onClick={() => router.push('..')}
                                         >
                                             Cancel
                                         </Button>

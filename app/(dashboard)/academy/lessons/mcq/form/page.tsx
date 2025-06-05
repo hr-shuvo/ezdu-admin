@@ -110,7 +110,7 @@ const AcademyMcqCreatePage = () => {
                         <h1 className="text-lg">Challenge Create</h1>
                     </div>
                     <div>
-                        <Link href="../..">
+                        <Link href="..">
                             <Button size='sm' variant='sidebarOutline'>
                                 <BiArrowBack /><span> Back</span>
                             </Button>
@@ -243,7 +243,7 @@ const AcademyMcqCreatePage = () => {
                                             className="w-full"
                                             variant="super"
                                             disabled={isPending}
-                                            onClick={() => router.push('../..')}
+                                            onClick={() => router.push('..')}
                                         >
                                             Cancel
                                         </Button>
@@ -253,7 +253,7 @@ const AcademyMcqCreatePage = () => {
                                             variant="secondary"
                                             disabled={isPending}
                                         >
-                                            Update
+                                            Create
                                         </Button>
 
                                     </div>
