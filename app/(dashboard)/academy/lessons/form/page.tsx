@@ -120,7 +120,7 @@ const AcademyLessonCreatePage = () => {
 
         const normalizedValues = {
             ...values,
-            subjectId: values.subjectId === "" || 'none' ? null : values.subjectId,
+            subjectId: ["", "none"].includes(values.subjectId) ? null : values.subjectId,
         }
 
         startTransition(async () => {
@@ -156,10 +156,10 @@ const AcademyLessonCreatePage = () => {
 
                 <div className="flex justify-between">
                     <div>
-                        <h1 className="text-5xl font-bold">Edit - Academy Lesson</h1>
+                        <h1 className="text-5xl font-bold">Create - Academy Lesson</h1>
                     </div>
                     <div>
-                        <Link href="../">
+                        <Link href="./">
                             <Button size='sm' variant='sidebarOutline'>
                                 <BiArrowBack/><span> Back</span>
                             </Button>
@@ -390,7 +390,7 @@ const AcademyLessonCreatePage = () => {
                                             variant="secondary"
                                             disabled={isPending}
                                         >
-                                            Update
+                                            Create
                                         </Button>
                                     </div>
 

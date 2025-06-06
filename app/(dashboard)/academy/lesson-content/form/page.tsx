@@ -134,7 +134,7 @@ const AcademyLessonCreatePage = () => {
 
                 <div className="flex justify-between">
                     <div>
-                        <h1 className="text-5xl font-bold">Edit - Academy Lesson</h1>
+                        <h1 className="text-5xl font-bold">Add - Academy Lesson Content</h1>
                     </div>
                     <div>
                         <Link href="./">
@@ -360,7 +360,7 @@ const AcademyLessonCreatePage = () => {
                                             variant="secondary"
                                             disabled={isPending}
                                         >
-                                            Update
+                                            Create
                                         </Button>
                                     </div>
 

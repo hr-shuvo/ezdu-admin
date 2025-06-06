@@ -177,7 +177,7 @@ const AcademyLessonEditPage = () => {
 
                 <div className="flex justify-between">
                     <div>
-                        <h1 className="text-5xl font-bold">Edit - Academy Lesson</h1>
+                        <h1 className="text-5xl font-bold">Edit - Academy Lesson Content</h1>
                     </div>
                     <div>
                         <Link href="../">
