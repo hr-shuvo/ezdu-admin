@@ -69,7 +69,7 @@ const AcademyMcqPage = () => {
                     <div className="flex justify-between">
                         <h1 className="text-4xl">{lesson ? (<>Lesson</>) : (<>Subject</>)}</h1>
                         <div className="gap-2 flex">
-                            <Link href={`..`}>
+                            <Link href={`.`}>
                                 <Button size='sm'> <IoArrowBack /> <span>Back</span></Button>
                             </Link>
                             <Link href={`..`}>

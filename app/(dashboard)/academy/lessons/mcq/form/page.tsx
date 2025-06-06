@@ -107,7 +107,7 @@ const AcademyMcqCreatePage = () => {
             <div className="w-full my-5 p-5 border">
                 <div className="flex justify-between">
                     <div>
-                        <h1 className="text-lg">Challenge Create</h1>
+                        <h1 className="text-lg">MCQ Create</h1>
                     </div>
                     <div>
                         <Link href="..">
