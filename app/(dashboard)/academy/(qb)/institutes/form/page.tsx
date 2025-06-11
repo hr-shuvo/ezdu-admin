@@ -1,7 +1,7 @@
 'use client'
 
-import { useParams, useRouter } from "next/navigation";
-import { useEffect, useTransition } from "react";
+import { useRouter } from "next/navigation";
+import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -11,18 +11,14 @@ import { Button } from "@/components/ui/button";
 import { BiArrowBack } from "react-icons/bi";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { AcademyClassSchema } from "@/schemas/academy/academyClassSchema";
-import { getAcademyClass, upsertAcademyClass } from "@/app/_services/academy/academyClassService";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { AcademicClassLevelType, AcademicInstituteType } from "@/utils/common";
+import { AcademicInstituteType } from "@/utils/common";
 import { Separator } from "@/components/ui/separator";
 import { AcademyInstituteSchema } from "@/schemas/academy/academyQuestionBankSchema";
-import { getAcademyInstitute, upsertAcademyInstitute } from "@/app/_services/academy/academyInstituteService";
 import { Textarea } from "@/components/ui/textarea";
+import { upsertAcademyInstitute } from "@/app/_services/academy/academyInstituteService";
 
-const AcademyClassEditPage = () => {
-    const params = useParams();
-
+const AcademyInstituteCreatePage = () => {
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
 
@@ -35,20 +31,6 @@ const AcademyClassEditPage = () => {
             description: "",
         }
     });
-
-    const {reset} = form;
-
-    useEffect(() => {
-        startTransition(async () => {
-            async function loadData() {
-                const result = await getAcademyInstitute(params.instituteId);
-                reset(result);
-            }
-
-            loadData();
-        });
-
-    }, [params.instituteId, reset]);
 
     const onSubmit = async (values: z.infer<typeof AcademyInstituteSchema>) => {
 
@@ -65,7 +47,7 @@ const AcademyClassEditPage = () => {
 
                     // router.push(`/courses/${courseId}`);
                 } else {
-                    console.error("Error while creating institute", res.error);
+                    console.error("Error while creating course", res.error);
                     toast.error(res.error, {
                         duration: 5000,
                         style: {
@@ -85,7 +67,7 @@ const AcademyClassEditPage = () => {
 
                 <div className="flex justify-between">
                     <div>
-                        <h1 className="text-5xl font-bold">Edit - Academy Institute</h1>
+                        <h1 className="text-5xl font-bold">Create - Academy Institute</h1>
                     </div>
                     <div>
                         <Link href="./">
@@ -126,13 +108,15 @@ const AcademyClassEditPage = () => {
                                     />
                                 </div>
 
+                                
+
                                 <div className='col-span-4 md:col-span-2'>
                                     <FormField
                                         control={form.control}
                                         name="subTitle"
                                         render={({field}) => (
                                             <FormItem>
-                                                <FormLabel>Title</FormLabel>
+                                                <FormLabel>subtitle</FormLabel>
                                                 <FormControl>
                                                     <Input
                                                         {...field}
@@ -166,6 +150,7 @@ const AcademyClassEditPage = () => {
                                         )}
                                     />
                                 </div>
+
 
                                 <div className='col-span-4 md:col-span-1'>
                                     <FormField
@@ -219,11 +204,17 @@ const AcademyClassEditPage = () => {
                                             variant="secondary"
                                             disabled={isPending}
                                         >
-                                            Update
+                                            Create
                                         </Button>
                                     </div>
 
                                 </div>
+
+
+
+
+
+
 
                             </div>
 
@@ -239,4 +230,4 @@ const AcademyClassEditPage = () => {
 
 }
 
-export default AcademyClassEditPage;
+export default AcademyInstituteCreatePage;

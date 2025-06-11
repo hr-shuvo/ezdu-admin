@@ -3,7 +3,6 @@
 import { useEffect, useState, useTransition } from "react";
 import { useBreadcrumb } from "@/components/common/breadcrumb";
 import Loading from "@/app/(dashboard)/modules/loading";
-import { loadAcademicClass } from "@/app/_services/academy/academyClassService";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Eye, Pencil, PlusCircle, Trash } from "lucide-react";
@@ -14,7 +13,7 @@ import CustomPagination from "@/components/common/pagination";
 import { AcademicInstituteType } from "@/utils/common";
 import { loadAcademicInstitute } from "@/app/_services/academy/academyInstituteService";
 
-const AcademyClassPage = () => {
+const AcademyInstitutePage = () => {
     const {setBreadcrumbList} = useBreadcrumb();
 
     const [institutes, setInstitutes] = useState([]);
@@ -194,4 +193,4 @@ const AcademyClassPage = () => {
 };
 
 
-export default AcademyClassPage;
+export default AcademyInstitutePage;

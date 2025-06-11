@@ -1,7 +1,7 @@
 'use client'
 
-import { useRouter } from "next/navigation";
-import { useTransition } from "react";
+import { useParams, useRouter } from "next/navigation";
+import { useEffect, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -15,10 +15,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { AcademicInstituteType } from "@/utils/common";
 import { Separator } from "@/components/ui/separator";
 import { AcademyInstituteSchema } from "@/schemas/academy/academyQuestionBankSchema";
+import { getAcademyInstitute, upsertAcademyInstitute } from "@/app/_services/academy/academyInstituteService";
 import { Textarea } from "@/components/ui/textarea";
-import { upsertAcademyInstitute } from "@/app/_services/academy/academyInstituteService";
 
-const AcademyClassCreatePage = () => {
+const AcademyInstituteEditPage = () => {
+    const params = useParams();
+
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
 
@@ -31,6 +33,20 @@ const AcademyClassCreatePage = () => {
             description: "",
         }
     });
+
+    const {reset} = form;
+
+    useEffect(() => {
+        startTransition(async () => {
+            async function loadData() {
+                const result = await getAcademyInstitute(params.instituteId);
+                reset(result);
+            }
+
+            loadData();
+        });
+
+    }, [params.instituteId, reset]);
 
     const onSubmit = async (values: z.infer<typeof AcademyInstituteSchema>) => {
 
@@ -47,7 +63,7 @@ const AcademyClassCreatePage = () => {
 
                     // router.push(`/courses/${courseId}`);
                 } else {
-                    console.error("Error while creating course", res.error);
+                    console.error("Error while creating institute", res.error);
                     toast.error(res.error, {
                         duration: 5000,
                         style: {
@@ -67,7 +83,7 @@ const AcademyClassCreatePage = () => {
 
                 <div className="flex justify-between">
                     <div>
-                        <h1 className="text-5xl font-bold">Create - Academy Institute</h1>
+                        <h1 className="text-5xl font-bold">Edit - Academy Institute</h1>
                     </div>
                     <div>
                         <Link href="./">
@@ -108,15 +124,13 @@ const AcademyClassCreatePage = () => {
                                     />
                                 </div>
 
-                                
-
                                 <div className='col-span-4 md:col-span-2'>
                                     <FormField
                                         control={form.control}
                                         name="subTitle"
                                         render={({field}) => (
                                             <FormItem>
-                                                <FormLabel>subtitle</FormLabel>
+                                                <FormLabel>Title</FormLabel>
                                                 <FormControl>
                                                     <Input
                                                         {...field}
@@ -150,7 +164,6 @@ const AcademyClassCreatePage = () => {
                                         )}
                                     />
                                 </div>
-
 
                                 <div className='col-span-4 md:col-span-1'>
                                     <FormField
@@ -204,17 +217,11 @@ const AcademyClassCreatePage = () => {
                                             variant="secondary"
                                             disabled={isPending}
                                         >
-                                            Create
+                                            Update
                                         </Button>
                                     </div>
 
                                 </div>
-
-
-
-
-
-
 
                             </div>
 
@@ -230,4 +237,4 @@ const AcademyClassCreatePage = () => {
 
 }
 
-export default AcademyClassCreatePage;
+export default AcademyInstituteEditPage;
