@@ -79,7 +79,7 @@ export const SidebarMenuList = {
                 },
                 {
                     title: "Model Test",
-                    url: "/academy/modeltest",
+                    url: "/academy/model-test",
                 },
             ],
         },
