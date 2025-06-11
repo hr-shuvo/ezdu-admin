@@ -11,30 +11,31 @@ import { Button } from "@/components/ui/button";
 import { BiArrowBack } from "react-icons/bi";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { AcademyClassSchema } from "@/schemas/academy/academyClassSchema";
-import { upsertAcademyClass } from "@/app/_services/academy/academyClassService";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { AcademicClassLevelType } from "@/utils/common";
+import { AcademicInstituteType } from "@/utils/common";
 import { Separator } from "@/components/ui/separator";
+import { AcademyInstituteSchema } from "@/schemas/academy/academyQuestionBankSchema";
+import { Textarea } from "@/components/ui/textarea";
+import { upsertAcademyInstitute } from "@/app/_services/academy/academyInstituteService";
 
 const AcademyClassCreatePage = () => {
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
 
-    const form = useForm<z.infer<typeof AcademyClassSchema>>({
-        resolver: zodResolver(AcademyClassSchema),
+    const form = useForm<z.infer<typeof AcademyInstituteSchema>>({
+        resolver: zodResolver(AcademyInstituteSchema),
         defaultValues: {
             title: "",
-            level: "",
-            // order: 1,
-            version: "BN",
+            subTitle: "",
+            type: "",
+            description: "",
         }
     });
 
-    const onSubmit = async (values: z.infer<typeof AcademyClassSchema>) => {
+    const onSubmit = async (values: z.infer<typeof AcademyInstituteSchema>) => {
 
         startTransition(async () => {
-            await upsertAcademyClass(values).then(res => {
+            await upsertAcademyInstitute(values).then(res => {
                 if (res.success) {
                     toast.success(res.success, {
                         duration: 5000,
@@ -66,7 +67,7 @@ const AcademyClassCreatePage = () => {
 
                 <div className="flex justify-between">
                     <div>
-                        <h1 className="text-5xl font-bold">Create - Academy Class</h1>
+                        <h1 className="text-5xl font-bold">Create - Academy Institute</h1>
                     </div>
                     <div>
                         <Link href="./">
@@ -107,10 +108,54 @@ const AcademyClassCreatePage = () => {
                                     />
                                 </div>
 
+                                
+
+                                <div className='col-span-4 md:col-span-2'>
+                                    <FormField
+                                        control={form.control}
+                                        name="subTitle"
+                                        render={({field}) => (
+                                            <FormItem>
+                                                <FormLabel>subtitle</FormLabel>
+                                                <FormControl>
+                                                    <Input
+                                                        {...field}
+                                                        placeholder="Enter subtitle"
+                                                        type="text"
+                                                        disabled={isPending}
+                                                    />
+                                                </FormControl>
+                                                <FormMessage/>
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
+
+                                <div className='col-span-4 md:col-span-2'>
+                                    <FormField
+                                        control={form.control}
+                                        name="description"
+                                        render={({field}) => (
+                                            <FormItem>
+                                                <FormLabel>Description</FormLabel>
+                                                <FormControl>
+                                                    <Textarea
+                                                        {...field}
+                                                        placeholder="Enter Desctiption"
+                                                        disabled={isPending}
+                                                    />
+                                                </FormControl>
+                                                <FormMessage/>
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
+
+
                                 <div className='col-span-4 md:col-span-1'>
                                     <FormField
                                         control={form.control}
-                                        name="level"
+                                        name="type"
                                         render={({field}) => (
                                             <FormItem>
                                                 <FormLabel>Select Level *</FormLabel>
@@ -125,7 +170,7 @@ const AcademyClassCreatePage = () => {
                                                     </SelectTrigger>
                                                     <SelectContent>
                                                         {
-                                                            AcademicClassLevelType.map((item) => (
+                                                            AcademicInstituteType.map((item) => (
                                                                 <SelectItem value={item.value}
                                                                             key={item.value}>{item.text}</SelectItem>
                                                             ))
@@ -141,35 +186,6 @@ const AcademyClassCreatePage = () => {
 
                                 </div>
 
-                                <div className='col-span-4 md:col-span-1'>
-                                    <FormField
-                                        control={form.control}
-                                        name="version"
-                                        render={({field}) => (
-                                            <FormItem>
-                                                <FormLabel>Select Version</FormLabel>
-                                                <Select
-                                                    name={field.name}
-                                                    onValueChange={field.onChange}
-                                                    value={field.value}
-                                                    disabled={isPending}
-                                                >
-                                                    <SelectTrigger className={'w-full'}>
-                                                        <SelectValue placeholder={"Select Version"}/>
-                                                    </SelectTrigger>
-                                                    <SelectContent>
-                                                        <SelectItem value={"BN"}>Bangla</SelectItem>
-                                                        <SelectItem value={"EN"}>English</SelectItem>
-
-                                                    </SelectContent>
-
-                                                </Select>
-
-                                            </FormItem>
-                                        )}
-                                    />
-
-                                </div>
 
                                 <div className='col-span-2'>
                                     <div className="col-span-2 mt-5 flex justify-end gap-2">
