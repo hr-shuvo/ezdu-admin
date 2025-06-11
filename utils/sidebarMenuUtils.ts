@@ -73,6 +73,14 @@ export const SidebarMenuList = {
                     title: "Lesson Content",
                     url: "/academy/lesson-content",
                 },
+                {
+                    title: "Institues",
+                    url: "/academy/institutes",
+                },
+                {
+                    title: "Model Test",
+                    url: "/academy/modeltest",
+                },
             ],
         },
         {
