@@ -14,15 +14,12 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { AcademicClassLevelType } from "@/utils/common";
 import { Separator } from "@/components/ui/separator";
-import { AcademySubjectSchema } from "@/schemas/academy/academySubjectSchema";
-import {
-    getAcademySubject,
-    loadAcademicSubject} from "@/app/_services/academy/academySubjectService";
 import { useBreadcrumb } from "@/components/common/breadcrumb";
 import { loadAcademicClass } from "@/app/_services/academy/academyClassService";
 import { AcademyModelTestSchema } from "@/schemas/academy/academyQuestionBankSchema";
-import { getAcademyModelTest, loadAcademicInstitute, upsertAcademyModelTest } from "@/app/_services/academy/academyInstituteService";
+import { loadAcademicInstitute, upsertAcademyModelTest } from "@/app/_services/academy/academyInstituteService";
 import { Textarea } from "@/components/ui/textarea";
+import { loadAcademicSubject } from "@/app/_services/academy/academySubjectService";
 
 const AcademyModelTestCreatePage = () => {
     const params = useParams();

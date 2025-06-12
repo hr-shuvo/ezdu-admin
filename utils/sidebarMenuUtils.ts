@@ -66,7 +66,7 @@ export const SidebarMenuList = {
                     url: "/academy/subjects",
                 },
                 {
-                    title: "Lesson",
+                    title: "Lesson & MCQ",
                     url: "/academy/lessons",
                 },
                 {

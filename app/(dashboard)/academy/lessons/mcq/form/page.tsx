@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Minus, Plus } from "lucide-react";
 import Link from "next/link";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { BiArrowBack } from "react-icons/bi";
@@ -16,6 +16,9 @@ import { AcademyMcqSchema } from "@/schemas/academy/academyMcqSchema";
 import { upsertAcademyMcq } from "@/app/_services/academy/academyMcqService";
 import { toast } from "sonner";
 import { Textarea } from "@/components/ui/textarea";
+import { loadAcademicInstitute } from "@/app/_services/academy/academyInstituteService";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
 
 const AcademyMcqCreatePage = () => {
     const searchParams = useSearchParams();
@@ -25,14 +28,20 @@ const AcademyMcqCreatePage = () => {
     const lessonId = searchParams.get('lessonId');
     const subjectId = searchParams.get('subjectId');
 
+    const [institutes, setInstitutes] = useState<any[]>([]);
+    const [modeltests, setModelTests] = useState<any[]>([]);
+
+    const [selectedInstituteIds, setSelectedInstituteIds] = useState<string[]>([]);
+    const [selectedModelTestIds, setSelectedModelTestIds] = useState<string[]>([]);
+
     const form = useForm<z.infer<typeof AcademyMcqSchema>>({
         resolver: zodResolver(AcademyMcqSchema),
         defaultValues: {
             question: "",
             order: 1,
             optionList: [
-                {text: "", correct: false},
-                {text: "", correct: false},
+                { text: "", correct: false },
+                { text: "", correct: false },
             ]
         }
     });
@@ -42,13 +51,26 @@ const AcademyMcqCreatePage = () => {
         name: "optionList"
     });
 
-    const { reset, setValue } = form;
 
     useEffect(() => {
         setValue('lessonId', lessonId!);
         setValue('subjectId', subjectId!);
     }, []);
 
+    useEffect(() => {
+        startTransition(async () => {
+            const _institutes = await loadAcademicInstitute(1, 100, "");
+            setInstitutes(_institutes.data);
+        })
+
+    }, [])
+
+    useEffect(() => {
+        console.log('institute ids: ', selectedInstituteIds);
+
+    }, [selectedInstituteIds])
+
+    const { reset, setValue } = form;
 
     const onSubmit = (values: z.infer<typeof AcademyMcqSchema>) => {
         // console.log('upsert mcq: ', values);
@@ -230,6 +252,42 @@ const AcademyMcqCreatePage = () => {
                                         </Button>
 
 
+                                    </div>
+
+                                </div>
+
+                                <div className="col-span-4">
+                                    <Separator orientation='horizontal' className="h-[5px] w-full" />
+                                </div>
+                                <div className="col-span-4">
+                                    <Separator orientation='horizontal' className="h-[5px] w-full" />
+                                </div>
+
+
+                                <div className="col-span-2">
+
+                                    <div className='flex flex-row gap-2'>
+                                        {/*<Label>Level</Label>*/}
+                                        <Select
+                                        
+                                        onValueChange={(data) => {
+                                            if (data && data !== 'all') {
+                                                // setSelectedInstituteIds(data)
+                                            } else {
+                                                // setClassId(null!);
+                                            }
+                                        }}>
+                                            <SelectTrigger className={'w-full min-w-[200px]'}>
+                                                <SelectValue placeholder='Choose Class' />
+                                            </SelectTrigger>
+
+                                            <SelectContent>
+                                                <SelectItem value={'all'}>All Class</SelectItem>
+                                                {institutes.map((item: { _id: string, title: string }) => (
+                                                    <SelectItem value={item._id} key={item._id}>{item.title}</SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
                                     </div>
 
                                 </div>
