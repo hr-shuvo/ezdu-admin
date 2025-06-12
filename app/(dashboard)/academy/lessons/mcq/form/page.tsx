@@ -19,6 +19,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { loadAcademicInstitute } from "@/app/_services/academy/academyInstituteService";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
+import { MultiSelect } from "@/components/ui/multi-select";
 
 const AcademyMcqCreatePage = () => {
     const searchParams = useSearchParams();
@@ -33,6 +34,8 @@ const AcademyMcqCreatePage = () => {
 
     const [selectedInstituteIds, setSelectedInstituteIds] = useState<string[]>([]);
     const [selectedModelTestIds, setSelectedModelTestIds] = useState<string[]>([]);
+
+    const [instituteYearList, setInstituteYearList] = useState<{ instituteId: string; title: string; year: number | null }[]>([]);
 
     const form = useForm<z.infer<typeof AcademyMcqSchema>>({
         resolver: zodResolver(AcademyMcqSchema),
@@ -60,20 +63,51 @@ const AcademyMcqCreatePage = () => {
     useEffect(() => {
         startTransition(async () => {
             const _institutes = await loadAcademicInstitute(1, 100, "");
-            setInstitutes(_institutes.data);
+            const _formattedInstituteList = _institutes.data.map((ins: any) => ({ value: ins._id, label: ins.subTitle }));
+            setInstitutes(_formattedInstituteList);
+            // console.log(_formattedInstituteList);
         })
 
     }, [])
 
     useEffect(() => {
-        console.log('institute ids: ', selectedInstituteIds);
+        if (!selectedInstituteIds || selectedInstituteIds.length === 0) {
+            setInstituteYearList([]);
+            return;
+        }
 
-    }, [selectedInstituteIds])
+        setInstituteYearList((prev) => {
+            if (!Array.isArray(institutes) || institutes.length === 0) return prev;
+
+            const updatedList = selectedInstituteIds.map((id) => {
+                const existing = prev.find((item) => item.instituteId === id);
+                const matchedInstitute = institutes.find((i) => i.value === id);
+
+                return {
+                    instituteId: id,
+                    title: matchedInstitute?.title || matchedInstitute?.label || 'Unknown',
+                    year: existing?.year ?? null,
+                };
+            });
+
+            return updatedList;
+        });
+
+        // console.log(instituteYearList);
+    }, [selectedInstituteIds, institutes])
+
+    useEffect(() =>{
+        // console.log(instituteYearList)
+        setValue("instituteIds", instituteYearList);
+
+    }, [instituteYearList])
 
     const { reset, setValue } = form;
 
     const onSubmit = (values: z.infer<typeof AcademyMcqSchema>) => {
-        // console.log('upsert mcq: ', values);
+        console.log('upsert mcq: ', values);
+
+        // return;
 
         startTransition(async () => {
             await upsertAcademyMcq(values).then(res => {
@@ -101,7 +135,7 @@ const AcademyMcqCreatePage = () => {
         });
     }
 
-    const onInvalid = (err: any) => {
+    const onInvalid: any = (err: any) => {
         let msg = "Please add some option";
         console.error(err)
 
@@ -267,28 +301,56 @@ const AcademyMcqCreatePage = () => {
                                 <div className="col-span-2">
 
                                     <div className='flex flex-row gap-2'>
-                                        {/*<Label>Level</Label>*/}
-                                        <Select
-                                        
-                                        onValueChange={(data) => {
-                                            if (data && data !== 'all') {
-                                                // setSelectedInstituteIds(data)
-                                            } else {
-                                                // setClassId(null!);
-                                            }
-                                        }}>
-                                            <SelectTrigger className={'w-full min-w-[200px]'}>
-                                                <SelectValue placeholder='Choose Class' />
-                                            </SelectTrigger>
 
-                                            <SelectContent>
-                                                <SelectItem value={'all'}>All Class</SelectItem>
-                                                {institutes.map((item: { _id: string, title: string }) => (
-                                                    <SelectItem value={item._id} key={item._id}>{item.title}</SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
+                                        <MultiSelect
+                                            options={institutes}
+                                            onValueChange={setSelectedInstituteIds}
+                                            // defaultValue={selectedFrameworks}
+                                            placeholder="Select Institute"
+                                            variant="inverted"
+                                            animation={2}
+                                            maxCount={3}
+                                        />
+
+
                                     </div>
+
+                                </div>
+
+                                <div className="col-span-4">
+
+                                    {instituteYearList.map((item) => (
+                                        <div key={item.instituteId} className="flex items-center gap-4 mb-2">
+                                            <span className="min-w-[350px] font-semibold">{item.title}</span>
+
+                                            <Select
+                                                value={item.year ? item.year.toString() : "none"}
+                                                onValueChange={(value) => {
+                                                    const year = value === "none" ? null : parseInt(value);
+                                                    setInstituteYearList((prev) =>
+                                                        prev.map((inst) =>
+                                                            inst.instituteId === item.instituteId
+                                                                ? { ...inst, year }
+                                                                : inst
+                                                        )
+                                                    );
+                                                }}
+                                            >
+                                                <SelectTrigger className="w-[140px]">
+                                                    <SelectValue placeholder="Select Year" />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    <SelectItem value="none">Select Year</SelectItem> {/* ✅ Avoid value="" (invalid in shadcn) */}
+                                                    {[2022, 2023, 2024, 2025, 2026].map((yr) => (
+                                                        <SelectItem key={yr} value={yr.toString()}>
+                                                            {yr}
+                                                        </SelectItem>
+                                                    ))}
+                                                </SelectContent>
+                                            </Select>
+                                        </div>
+                                    ))}
+
 
                                 </div>
 
