@@ -30,10 +30,10 @@ const AcademyMcqCreatePage = () => {
     const subjectId = searchParams.get('subjectId');
 
     const [institutes, setInstitutes] = useState<any[]>([]);
-    const [modeltests, setModelTests] = useState<any[]>([]);
+    // const [modeltests, setModelTests] = useState<any[]>([]);
 
     const [selectedInstituteIds, setSelectedInstituteIds] = useState<string[]>([]);
-    const [selectedModelTestIds, setSelectedModelTestIds] = useState<string[]>([]);
+    // const [selectedModelTestIds, setSelectedModelTestIds] = useState<string[]>([]);
 
     const [instituteYearList, setInstituteYearList] = useState<{ instituteId: string; title: string; year: number | null }[]>([]);
 
