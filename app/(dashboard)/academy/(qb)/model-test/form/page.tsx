@@ -17,57 +17,61 @@ import { Separator } from "@/components/ui/separator";
 import { AcademySubjectSchema } from "@/schemas/academy/academySubjectSchema";
 import {
     getAcademySubject,
-    loadAcademicSubject,
-    upsertAcademySubject
-} from "@/app/_services/academy/academySubjectService";
+    loadAcademicSubject} from "@/app/_services/academy/academySubjectService";
 import { useBreadcrumb } from "@/components/common/breadcrumb";
 import { loadAcademicClass } from "@/app/_services/academy/academyClassService";
+import { AcademyModelTestSchema } from "@/schemas/academy/academyQuestionBankSchema";
+import { getAcademyModelTest, loadAcademicInstitute, upsertAcademyModelTest } from "@/app/_services/academy/academyInstituteService";
+import { Textarea } from "@/components/ui/textarea";
 
-const AcademySubjectEditPage = () => {
+const AcademyModelTestCreatePage = () => {
     const params = useParams();
-    const {setBreadcrumbList} = useBreadcrumb();
+    const { setBreadcrumbList } = useBreadcrumb();
 
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
 
-    const [level, setLevel] = useState('PRIMARY');
+    const [level, setLevel] = useState('all');
     const [classId, setClassId] = useState('');
     const [classes, setClasses] = useState<any[]>([]);
     const [subjects, setSubjects] = useState<any[]>([]);
+    const [institutes, setInstitutes] = useState<any[]>([]);
 
     useEffect(() => {
         setBreadcrumbList([
-            {title: 'Home', link: '/'},
-            {title: 'Subjects', link: '/academy/subjects'},
-            {title: 'Edit', link: '/academy/subjects'},
+            { title: 'Home', link: '/' },
+            { title: 'Model Test', link: '/academy/model-test' },
+            { title: 'Edit', link: '/academy/model-test' },
         ]);
 
     }, [setBreadcrumbList]);
 
-    const form = useForm<z.infer<typeof AcademySubjectSchema>>({
-        resolver: zodResolver(AcademySubjectSchema),
+    const form = useForm<z.infer<typeof AcademyModelTestSchema>>({
+        resolver: zodResolver(AcademyModelTestSchema),
         defaultValues: {
             title: "",
             subTitle: "",
-            hasSubjectPaper: false,
-            subjectId: undefined,
-            classId: "",
+            subjectId: "",
+            instituteId: "",
             // order: 1,
         }
     });
 
-    const {reset} = form;
+    const { reset } = form;
 
     useEffect(() => {
         startTransition(async () => {
+            const _institutes = await loadAcademicInstitute(1, 1000);
+            setInstitutes(_institutes.data);
+
             const _classes = await loadAcademicClass(1, 100, level);
             setClasses(_classes.data);
 
             const _subjects = await loadAcademicSubject(1, 100, level, classId);
-            setSubjects(_subjects.data.filter((s: any) => s._id !== params.subjectId));
+            setSubjects(_subjects.data.filter((s: any) => s._id !== params.subjectId));  
         });
 
-    }, [params.subjectId, reset]);
+    }, []);
 
     useEffect(() => {
         startTransition(async () => {
@@ -84,16 +88,17 @@ const AcademySubjectEditPage = () => {
     }, [classId]);
 
 
-    const onSubmit = async (values: z.infer<typeof AcademySubjectSchema>) => {
+    const onSubmit = async (values: z.infer<typeof AcademyModelTestSchema>) => {
 
         const normalizedValues = {
             ...values,
-            subjectId: values.subjectId === "" || 'none' ? null : values.subjectId,
-            hasSubjectPaper: !(values.subjectId === "" || 'none')
+            subjectId: values.subjectId === "" || values.subjectId === 'none' ? null : values.subjectId,
         }
 
+        console.log(normalizedValues);
+
         startTransition(async () => {
-            await upsertAcademySubject(normalizedValues).then(res => {
+            await upsertAcademyModelTest(normalizedValues).then(res => {
                 if (res.success) {
                     toast.success(res.success, {
                         duration: 5000,
@@ -105,7 +110,7 @@ const AcademySubjectEditPage = () => {
 
                     // router.push(`/courses/${courseId}`);
                 } else {
-                    console.error("Error while creating course", res.error);
+                    console.error("Error while creating model test", res.error);
                     toast.error(res.error, {
                         duration: 5000,
                         style: {
@@ -118,6 +123,11 @@ const AcademySubjectEditPage = () => {
         });
     }
 
+    const onInvalid = (err:any)=>{
+        console.error(err)
+
+    }
+
 
     return (
         <>
@@ -125,31 +135,31 @@ const AcademySubjectEditPage = () => {
 
                 <div className="flex justify-between">
                     <div>
-                        <h1 className="text-5xl font-bold">Create - Academy Subject</h1>
+                        <h1 className="text-5xl font-bold">Create - Model Test</h1>
                     </div>
                     <div>
                         <Link href="./">
                             <Button size='sm' variant='sidebarOutline'>
-                                <BiArrowBack/><span> Back</span>
+                                <BiArrowBack /><span> Back</span>
                             </Button>
                         </Link>
 
                     </div>
                 </div>
 
-                <Separator className='my-5'/>
+                <Separator className='my-5' />
 
                 <div className="w-full mt-5">
 
                     <Form {...form}>
-                        <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
+                        <form onSubmit={form.handleSubmit(onSubmit, onInvalid)} className='space-y-4'>
                             <div className="grid grid-cols-4 gap-4">
 
                                 <div className='col-span-4 md:col-span-2 mt-2'>
                                     <FormField
                                         control={form.control}
                                         name="title"
-                                        render={({field}) => (
+                                        render={({ field }) => (
                                             <FormItem>
                                                 <FormLabel>Title *</FormLabel>
                                                 <FormControl>
@@ -160,7 +170,7 @@ const AcademySubjectEditPage = () => {
                                                         disabled={isPending}
                                                     />
                                                 </FormControl>
-                                                <FormMessage/>
+                                                <FormMessage />
                                             </FormItem>
                                         )}
                                     />
@@ -170,7 +180,7 @@ const AcademySubjectEditPage = () => {
                                     <FormField
                                         control={form.control}
                                         name="subTitle"
-                                        render={({field}) => (
+                                        render={({ field }) => (
                                             <FormItem>
                                                 <FormLabel>Subtitle</FormLabel>
                                                 <FormControl>
@@ -181,7 +191,27 @@ const AcademySubjectEditPage = () => {
                                                         disabled={isPending}
                                                     />
                                                 </FormControl>
-                                                <FormMessage/>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
+
+                                <div className='col-span-4 md:col-span-4 mt-2'>
+                                    <FormField
+                                        control={form.control}
+                                        name="description"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Description</FormLabel>
+                                                <FormControl>
+                                                    <Textarea
+                                                        {...field}
+                                                        placeholder="Enter description"
+                                                        disabled={isPending}
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
                                             </FormItem>
                                         )}
                                     />
@@ -196,13 +226,13 @@ const AcademySubjectEditPage = () => {
                                             onValueChange={(level) => setLevel(level)}
                                         >
                                             <SelectTrigger className={'w-full'}>
-                                                <SelectValue placeholder={"Select Level"}/>
+                                                <SelectValue placeholder={"Select Level"} />
                                             </SelectTrigger>
                                             <SelectContent>
                                                 {
                                                     AcademicClassLevelType.map((item) => (
                                                         <SelectItem value={item.value}
-                                                                    key={item.value}>{item.text}</SelectItem>
+                                                            key={item.value}>{item.text}</SelectItem>
                                                     ))
                                                 }
 
@@ -216,41 +246,33 @@ const AcademySubjectEditPage = () => {
                                 </div>
 
                                 <div className='col-span-4 md:col-span-1 mt-2'>
-                                    <FormField
-                                        control={form.control}
-                                        name="classId"
-                                        render={({field}) => (
-                                            <FormItem>
-                                                <FormLabel>Select Class</FormLabel>
-                                                <Select
-                                                    name={field.name}
-                                                    onValueChange={val =>{
-                                                        field.onChange(val);
-                                                        setClassId(val)
-                                                    }}
-                                                    value={field.value}
-                                                    disabled={isPending}
-                                                >
-                                                    <SelectTrigger className={'w-full'}>
-                                                        <SelectValue
-                                                            placeholder={"Select Class"}
-                                                        />
-                                                    </SelectTrigger>
-                                                    <SelectContent>
-                                                        {
-                                                            classes.map((item: { _id: string, title: string }) => (
-                                                                <SelectItem value={item._id}
-                                                                            key={item._id}>{item.title}</SelectItem>
-                                                            ))
-                                                        }
+                                    <FormItem>
+                                        <FormLabel>Select Class</FormLabel>
+                                        <Select
+                                            onValueChange={val => {
+                                                setClassId(val)
+                                            }}
+                                            value={classId}
+                                            disabled={isPending}
+                                        >
+                                            <SelectTrigger className={'w-full'}>
+                                                <SelectValue
+                                                    placeholder={"Select Level"}
+                                                />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                {
+                                                    classes.map((item: { _id: string, title: string }) => (
+                                                        <SelectItem value={item._id}
+                                                            key={item._id}>{item.title}</SelectItem>
+                                                    ))
+                                                }
 
-                                                    </SelectContent>
+                                            </SelectContent>
 
-                                                </Select>
+                                        </Select>
 
-                                            </FormItem>
-                                        )}
-                                    />
+                                    </FormItem>
 
                                 </div>
 
@@ -258,9 +280,9 @@ const AcademySubjectEditPage = () => {
                                     <FormField
                                         control={form.control}
                                         name="subjectId"
-                                        render={({field}) => (
+                                        render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel>Select Parent Subject</FormLabel>
+                                                <FormLabel>Select Subject</FormLabel>
                                                 <Select
                                                     name={field.name}
                                                     onValueChange={field.onChange}
@@ -277,7 +299,44 @@ const AcademySubjectEditPage = () => {
                                                         {
                                                             subjects.map((item: { _id: string, title: string }) => (
                                                                 <SelectItem value={item._id}
-                                                                            key={item._id}>{item.title}</SelectItem>
+                                                                    key={item._id}>{item.title}</SelectItem>
+                                                            ))
+                                                        }
+
+                                                    </SelectContent>
+
+                                                </Select>
+
+                                            </FormItem>
+                                        )}
+                                    />
+
+                                </div>
+
+                                <div className='col-span-4 md:col-span-1 mt-2'>
+                                    <FormField
+                                        control={form.control}
+                                        name="instituteId"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Select Institute</FormLabel>
+                                                <Select
+                                                    name={field.name}
+                                                    onValueChange={field.onChange}
+                                                    value={field.value}
+                                                    disabled={isPending}
+                                                >
+                                                    <SelectTrigger className={'w-full'}>
+                                                        <SelectValue
+                                                            placeholder={"Select Institute"}
+                                                        />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        <SelectItem value={'none'}>None</SelectItem>
+                                                        {
+                                                            institutes.map((item: { _id: string, title: string, subTitle: string }) => (
+                                                                <SelectItem value={item._id}
+                                                                    key={item._id}>{item.subTitle} - {item.title}</SelectItem>
                                                             ))
                                                         }
 
@@ -328,4 +387,4 @@ const AcademySubjectEditPage = () => {
 
 }
 
-export default AcademySubjectEditPage;
+export default AcademyModelTestCreatePage;

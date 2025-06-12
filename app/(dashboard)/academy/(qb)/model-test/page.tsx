@@ -89,7 +89,7 @@ const AcademyModelTestPage = () => {
                             <h1 className="text-5xl font-bold">Model Test List</h1>
                         </div>
                         <div>
-                            <Link href="./lessons/form">
+                            <Link href="./model-test/form">
                                 <Button size='sm' variant='sidebarOutline'>
                                     <PlusCircle /><span> Add</span>
                                 </Button>
@@ -164,7 +164,7 @@ const AcademyModelTestPage = () => {
                                 </Select>
                             </div>
 
-                            
+
                             <div className='flex flex-row gap-2'>
                                 {/*<Label>Level</Label>*/}
                                 <Select onValueChange={(data) => {
@@ -178,7 +178,7 @@ const AcademyModelTestPage = () => {
 
                                     <SelectContent>
                                         <SelectItem value={'all'}>All Institute</SelectItem>
-                                        {institutes.map((item: { _id: string, title: string, subTitle:string }) => (
+                                        {institutes.map((item: { _id: string, title: string, subTitle: string }) => (
                                             <SelectItem value={item._id} key={item._id}>{item.subTitle} - {item.title}</SelectItem>
                                         ))}
                                     </SelectContent>
@@ -215,24 +215,21 @@ const AcademyModelTestPage = () => {
 
                                                             <TableCell>
                                                                 <div className="flex justify-center gap-1">
-                                                                    <Link href={`../lessons/${data._id}`}><Button
+                                                                    <Link href={`../model-test/${data._id}`}><Button
                                                                         variant='default'
-                                                                        size='sm'><Eye /></Button></Link>
+                                                                        size='sm'><Eye /></Button>
+                                                                    </Link>
 
-                                                                    <Link href={`./lessons/form/${data._id}`}><Button
+                                                                    <Link href={`./model-test/form/${data._id}`}><Button
                                                                         variant='default'
-                                                                        size='sm'><span><Pencil /></span></Button></Link>
+                                                                        size='sm'><span><Pencil /></span></Button>
+                                                                    </Link>
 
                                                                     <Link href={'#'}><Button
                                                                         variant='destructiveOutline'
-                                                                        size='sm'><span><Trash /></span></Button></Link>
-
-                                                                    <Link href={`./lessons/mcq?subjectId=${subjectId}&lessonId=${data._id}`}><Button
-                                                                        variant='secondary'
-                                                                        size='sm'>
-                                                                        <span><TiTick /></span> MCQ
-                                                                    </Button>
+                                                                        size='sm'><span><Trash /></span></Button>
                                                                     </Link>
+
 
 
                                                                 </div>

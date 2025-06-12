@@ -81,7 +81,7 @@ export const loadAcademicModelTest = async (page: number, size: number, subjectI
 
 export const getAcademyModelTest = async (id?: any): Promise<any> => {
     try {
-        const response = await httpClient.get<any>(`/academy/qb/institute/${id}`);
+        const response = await httpClient.get<any>(`/academy/qb/modeltest/${id}`);
         // console.log(response)
 
         return response.data;
@@ -95,7 +95,7 @@ export const getAcademyModelTest = async (id?: any): Promise<any> => {
 
 export const upsertAcademyModelTest = async (model: any) => {
     try {
-        const response = await httpClient.post(`/academy/qb/institute/upsert`, model);
+        const response = await httpClient.post(`/academy/qb/modeltest/upsert`, model);
 
         if (response.status === 201 || response.status === 200) {
             return {success: response.data};
