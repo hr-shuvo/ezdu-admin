@@ -12,7 +12,7 @@ import { BiArrowBack } from "react-icons/bi";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { AcademicClassLevelType } from "@/utils/common";
+import { AcademicClassLevelType, AcademySegmentType } from "@/utils/common";
 import { Separator } from "@/components/ui/separator";
 import { AcademySubjectSchema } from "@/schemas/academy/academySubjectSchema";
 import {
@@ -25,7 +25,7 @@ import { loadAcademicClass } from "@/app/_services/academy/academyClassService";
 
 const AcademySubjectEditPage = () => {
     const params = useParams();
-    const {setBreadcrumbList} = useBreadcrumb();
+    const { setBreadcrumbList } = useBreadcrumb();
 
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
@@ -37,9 +37,9 @@ const AcademySubjectEditPage = () => {
 
     useEffect(() => {
         setBreadcrumbList([
-            {title: 'Home', link: '/'},
-            {title: 'Subjects', link: '/academy/subjects'},
-            {title: 'Edit', link: '/academy/subjects'},
+            { title: 'Home', link: '/' },
+            { title: 'Subjects', link: '/academy/subjects' },
+            { title: 'Edit', link: '/academy/subjects' },
         ]);
 
     }, [setBreadcrumbList]);
@@ -56,7 +56,7 @@ const AcademySubjectEditPage = () => {
         }
     });
 
-    const {reset} = form;
+    const { reset } = form;
 
     useEffect(() => {
         startTransition(async () => {
@@ -139,14 +139,14 @@ const AcademySubjectEditPage = () => {
                     <div>
                         <Link href="../">
                             <Button size='sm' variant='sidebarOutline'>
-                                <BiArrowBack/><span> Back</span>
+                                <BiArrowBack /><span> Back</span>
                             </Button>
                         </Link>
 
                     </div>
                 </div>
 
-                <Separator className='my-5'/>
+                <Separator className='my-5' />
 
                 <div className="w-full mt-5">
 
@@ -158,7 +158,7 @@ const AcademySubjectEditPage = () => {
                                     <FormField
                                         control={form.control}
                                         name="title"
-                                        render={({field}) => (
+                                        render={({ field }) => (
                                             <FormItem>
                                                 <FormLabel>Title *</FormLabel>
                                                 <FormControl>
@@ -169,7 +169,28 @@ const AcademySubjectEditPage = () => {
                                                         disabled={isPending}
                                                     />
                                                 </FormControl>
-                                                <FormMessage/>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
+
+                                <div className='col-span-4 md:col-span-2 mt-2'>
+                                    <FormField
+                                        control={form.control}
+                                        name="id"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Unique Id *</FormLabel>
+                                                <FormControl>
+                                                    <Input
+                                                        {...field}
+                                                        placeholder="Enter Id"
+                                                        type="text"
+                                                        disabled={isPending}
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
                                             </FormItem>
                                         )}
                                     />
@@ -179,7 +200,7 @@ const AcademySubjectEditPage = () => {
                                     <FormField
                                         control={form.control}
                                         name="subTitle"
-                                        render={({field}) => (
+                                        render={({ field }) => (
                                             <FormItem>
                                                 <FormLabel>Subtitle</FormLabel>
                                                 <FormControl>
@@ -190,7 +211,7 @@ const AcademySubjectEditPage = () => {
                                                         disabled={isPending}
                                                     />
                                                 </FormControl>
-                                                <FormMessage/>
+                                                <FormMessage />
                                             </FormItem>
                                         )}
                                     />
@@ -205,13 +226,13 @@ const AcademySubjectEditPage = () => {
                                             onValueChange={(level) => setLevel(level)}
                                         >
                                             <SelectTrigger className={'w-full'}>
-                                                <SelectValue placeholder={"Select Level"}/>
+                                                <SelectValue placeholder={"Select Level"} />
                                             </SelectTrigger>
                                             <SelectContent>
                                                 {
                                                     AcademicClassLevelType.map((item) => (
                                                         <SelectItem value={item.value}
-                                                                    key={item.value}>{item.text}</SelectItem>
+                                                            key={item.value}>{item.text}</SelectItem>
                                                     ))
                                                 }
 
@@ -228,12 +249,12 @@ const AcademySubjectEditPage = () => {
                                     <FormField
                                         control={form.control}
                                         name="classId"
-                                        render={({field}) => (
+                                        render={({ field }) => (
                                             <FormItem>
                                                 <FormLabel>Select Class</FormLabel>
                                                 <Select
                                                     name={field.name}
-                                                    onValueChange={val =>{
+                                                    onValueChange={val => {
                                                         field.onChange(val);
                                                         setClassId(val)
                                                     }}
@@ -249,7 +270,7 @@ const AcademySubjectEditPage = () => {
                                                         {
                                                             classes.map((item: { _id: string, title: string }) => (
                                                                 <SelectItem value={item._id}
-                                                                            key={item._id}>{item.title}</SelectItem>
+                                                                    key={item._id}>{item.title}</SelectItem>
                                                             ))
                                                         }
 
@@ -267,7 +288,7 @@ const AcademySubjectEditPage = () => {
                                     <FormField
                                         control={form.control}
                                         name="subjectId"
-                                        render={({field}) => (
+                                        render={({ field }) => (
                                             <FormItem>
                                                 <FormLabel>Select Parent Subject</FormLabel>
                                                 <Select
@@ -286,7 +307,7 @@ const AcademySubjectEditPage = () => {
                                                         {
                                                             subjects.map((item: { _id: string, title: string }) => (
                                                                 <SelectItem value={item._id}
-                                                                            key={item._id}>{item.title}</SelectItem>
+                                                                    key={item._id}>{item.title}</SelectItem>
                                                             ))
                                                         }
 
@@ -297,6 +318,43 @@ const AcademySubjectEditPage = () => {
                                             </FormItem>
                                         )}
                                     />
+
+                                </div>
+
+                                <div className='col-span-4 md:col-span-1 mt-2'>
+                                    <FormField
+                                        control={form.control}
+                                        name="segment"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Select Segment</FormLabel>
+                                                <Select
+                                                    name={field.name}
+                                                    onValueChange={field.onChange}
+                                                    value={field.value}
+                                                    disabled={isPending}
+                                                >
+                                                    <SelectTrigger className={'w-full'}>
+                                                        <SelectValue placeholder={"Select Segment"} />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        {
+                                                            AcademySegmentType.map((item) => (
+                                                                <SelectItem value={item.value}
+                                                                    key={item.value}>{item.text}</SelectItem>
+                                                            ))
+                                                        }
+
+                                                    </SelectContent>
+
+                                                </Select>
+
+                                            </FormItem>
+
+                                        )}
+                                    />
+
+
 
                                 </div>
 

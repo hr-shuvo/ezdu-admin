@@ -3,7 +3,7 @@ import httpClient from "@/app/utils/httpClient";
 
 
 
-export const loadAcademicSubject = async (page: number, size: number, level?: string, classId?: string): Promise<PaginatedList> => {
+export const loadAcademicSubject = async (page: number, size: number, level?: string, classId?: string, segment?:string): Promise<PaginatedList> => {
     try {
         const params: Record<string, any> = {
             pg: page,
@@ -16,6 +16,10 @@ export const loadAcademicSubject = async (page: number, size: number, level?: st
 
         if (level && level !='all') {
             params.level = level;
+        }
+
+        if(segment && segment !='all'){
+            params.segment = segment;
         }
 
         const response = await httpClient.get<PaginatedList>("/academy/subjects", {params: params});

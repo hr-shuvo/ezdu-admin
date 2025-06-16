@@ -12,18 +12,17 @@ import { BiArrowBack } from "react-icons/bi";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { AcademicClassLevelType } from "@/utils/common";
+import { AcademicClassLevelType, AcademySegmentType } from "@/utils/common";
 import { Separator } from "@/components/ui/separator";
 import { AcademySubjectSchema } from "@/schemas/academy/academySubjectSchema";
 import {
-    getAcademySubject,
     loadAcademicSubject,
     upsertAcademySubject
 } from "@/app/_services/academy/academySubjectService";
 import { useBreadcrumb } from "@/components/common/breadcrumb";
 import { loadAcademicClass } from "@/app/_services/academy/academyClassService";
 
-const AcademySubjectEditPage = () => {
+const AcademySubjectCreatePage = () => {
     const params = useParams();
     const {setBreadcrumbList} = useBreadcrumb();
 
@@ -48,6 +47,7 @@ const AcademySubjectEditPage = () => {
         resolver: zodResolver(AcademySubjectSchema),
         defaultValues: {
             title: "",
+            id: "",
             subTitle: "",
             hasSubjectPaper: false,
             subjectId: undefined,
@@ -91,6 +91,7 @@ const AcademySubjectEditPage = () => {
             subjectId: values.subjectId === "" || 'none' ? null : values.subjectId,
             hasSubjectPaper: !(values.subjectId === "" || 'none')
         }
+        console.log(normalizedValues)
 
         startTransition(async () => {
             await upsertAcademySubject(normalizedValues).then(res => {
@@ -156,6 +157,27 @@ const AcademySubjectEditPage = () => {
                                                     <Input
                                                         {...field}
                                                         placeholder="Enter title"
+                                                        type="text"
+                                                        disabled={isPending}
+                                                    />
+                                                </FormControl>
+                                                <FormMessage/>
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
+
+                                <div className='col-span-4 md:col-span-2 mt-2'>
+                                    <FormField
+                                        control={form.control}
+                                        name="id"
+                                        render={({field}) => (
+                                            <FormItem>
+                                                <FormLabel>Unique Id *</FormLabel>
+                                                <FormControl>
+                                                    <Input
+                                                        {...field}
+                                                        placeholder="Enter Id"
                                                         type="text"
                                                         disabled={isPending}
                                                     />
@@ -291,6 +313,43 @@ const AcademySubjectEditPage = () => {
 
                                 </div>
 
+                                <div className='col-span-4 md:col-span-1 mt-2'>
+                                    <FormField
+                                    control={form.control}
+                                    name="segment"
+                                    render={({field}) =>(
+                                        <FormItem>
+                                        <FormLabel>Select Segment</FormLabel>
+                                        <Select
+                                             name={field.name}
+                                                    onValueChange={field.onChange}
+                                                    value={field.value}
+                                                    disabled={isPending}
+                                        >
+                                            <SelectTrigger className={'w-full'}>
+                                                <SelectValue placeholder={"Select Segment"}/>
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                {
+                                                    AcademySegmentType.map((item) => (
+                                                        <SelectItem value={item.value}
+                                                                    key={item.value}>{item.text}</SelectItem>
+                                                    ))
+                                                }
+
+                                            </SelectContent>
+
+                                        </Select>
+
+                                    </FormItem>
+
+                                    )}
+                                    />
+                                    
+
+
+                                </div>
+
                                 <div className='col-span-2'>
                                     <div className="col-span-2 mt-5 flex justify-end gap-2">
                                         <Button
@@ -328,4 +387,4 @@ const AcademySubjectEditPage = () => {
 
 }
 
-export default AcademySubjectEditPage;
+export default AcademySubjectCreatePage;

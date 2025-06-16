@@ -11,7 +11,6 @@ import Link from "next/link";
 import { useEffect, useState, useTransition } from "react";
 import Loading from "../../loading";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
 import CustomPagination from "@/components/common/pagination";
 
 
@@ -57,10 +56,10 @@ const AdmissionCategoryPage = () => {
 
                     <div className="flex justify-between mt-5">
                         <div>
-                            <h1 className="text-5xl font-bold">Subject List</h1>
+                            <h1 className="text-5xl font-bold">Admission Category List</h1>
                         </div>
                         <div>
-                            <Link href="./subjects/form">
+                            <Link href="./category/form">
                                 <Button size='sm' variant='sidebarOutline'>
                                     <PlusCircle /><span> Add</span>
                                 </Button>
@@ -118,11 +117,11 @@ const AdmissionCategoryPage = () => {
                                                             
                                                             <TableCell>
                                                                 <div className="flex justify-center gap-1">
-                                                                    <Link href={`../subjects/${data._id}`}><Button
+                                                                    <Link href={`../category/${data._id}`}><Button
                                                                         variant='default'
                                                                         size='sm'><Eye /></Button></Link>
 
-                                                                    <Link href={`./subjects/form/${data._id}`}><Button
+                                                                    <Link href={`./category/form/${data._id}`}><Button
                                                                         variant='default'
                                                                         size='sm'><span><Pencil /></span></Button></Link>
                                                                     <Link href={'#'}><Button
