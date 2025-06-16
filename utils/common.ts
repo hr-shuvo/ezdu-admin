@@ -16,3 +16,15 @@ export const AcademicInstituteType: {
     {text: "School/College", value: "SCHOOL"},
 ];
 
+
+export const AcademySegmentType: {
+    text: string,
+    value: string
+}[] = [
+    {text: "Admission", value: "ADMISSION"},
+    {text: "HSC", value: "HSC"},
+    {text: "SSC", value: "SSC"},
+    {text: "Junior (6-8)", value: "JUNIOR"},
+    {text: "Job", value: "JOB"},
+];
+

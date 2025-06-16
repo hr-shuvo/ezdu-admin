@@ -15,11 +15,11 @@ export const SidebarMenuList = {
         avatar: "/logo/logo.png",
     },
     teams: [
-        {
-            name: "Ez Du",
-            logo: GalleryVerticalEnd,
-            plan: "Dashboard | Admin",
-        },
+        // {
+        //     name: "Ez Du",
+        //     logo: GalleryVerticalEnd,
+        //     plan: "Dashboard | Admin",
+        // },
     ],
     navMain: [
         {
@@ -81,6 +81,18 @@ export const SidebarMenuList = {
                     title: "Model Test",
                     url: "/academy/model-test",
                 },
+            ],
+        },        
+        {
+            title: "Admission",
+            url: "admission",
+            icon: BookOpen,
+            items: [
+                {
+                    title: "Category",
+                    url: "/admission/category"
+                },
+                
             ],
         },
         {
