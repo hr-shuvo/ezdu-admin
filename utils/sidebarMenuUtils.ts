@@ -92,6 +92,10 @@ export const SidebarMenuList = {
                     title: "Category",
                     url: "/admission/category"
                 },
+                {
+                    title: " Unit",
+                    url: "/admission/category-unit"
+                },
                 
             ],
         },
