@@ -21,6 +21,7 @@ import { MultiSelect } from "@/components/ui/multi-select";
 import { Separator } from "@/components/ui/separator";
 import { loadAcademicInstitute } from "@/app/_services/academy/academyInstituteService";
 import { Label } from "@/components/ui/label";
+import Image from "next/image";
 
 const AcademyMcqEditPage = () => {
     const params = useParams();
@@ -29,7 +30,7 @@ const AcademyMcqEditPage = () => {
     const [isPending, startTransition] = useTransition();
 
     const [lessonId, setLessonId] = useState(searchParams.get('lessonId'));
-
+    const [imageUrl, setImageUrl] = useState();
 
     const [institutes, setInstitutes] = useState<any[]>([]);
     // const [modeltests, setModelTests] = useState<any[]>([]);
@@ -106,6 +107,7 @@ const AcademyMcqEditPage = () => {
             async function loadData() {
                 const _mcq = await getAcademyMcq(params.mcqId);
                 reset(_mcq);
+                setImageUrl(_mcq.imageUrl)
                 // console.log(_mcq)
 
                 // console.log(_mcq.instituteIds)
@@ -341,6 +343,7 @@ const AcademyMcqEditPage = () => {
                                                     <Input
                                                         type="file"
                                                         accept="image/*"
+                                                        className="w-full cursor-pointer bg-muted file:mr-4 file:rounded-md file:border-0 file:bg-primary file:px-4 file:py-2 file:text-white hover:file:bg-primary/80"
                                                         onChange={(e) => {
                                                             const file = e.target.files?.[0] ?? null;
                                                             field.onChange(file);
@@ -354,6 +357,20 @@ const AcademyMcqEditPage = () => {
                                         )}
                                     />
 
+                                    {
+                                        imageUrl && (
+                                            <>
+                                                <Image
+                                                    src={imageUrl || "noimage"}
+                                                    alt="question image"
+                                                    height={100}
+                                                    width={120}
+                                                    className="mt-2 rounded-md border p-2 w-fit"
+                                                />
+
+                                            </>
+                                        )
+                                    }
 
                                 </div>
 
