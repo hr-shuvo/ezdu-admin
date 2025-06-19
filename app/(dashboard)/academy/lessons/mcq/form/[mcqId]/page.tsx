@@ -20,6 +20,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { MultiSelect } from "@/components/ui/multi-select";
 import { Separator } from "@/components/ui/separator";
 import { loadAcademicInstitute } from "@/app/_services/academy/academyInstituteService";
+import { Label } from "@/components/ui/label";
 
 const AcademyMcqEditPage = () => {
     const params = useParams();
@@ -105,6 +106,7 @@ const AcademyMcqEditPage = () => {
             async function loadData() {
                 const _mcq = await getAcademyMcq(params.mcqId);
                 reset(_mcq);
+                // console.log(_mcq)
 
                 // console.log(_mcq.instituteIds)
                 if (_mcq.instituteIds && _mcq?.instituteIds?.length > 0) {
@@ -122,8 +124,26 @@ const AcademyMcqEditPage = () => {
     const onSubmit = (values: z.infer<typeof AcademyMcqSchema>) => {
         // console.log('upsert mcq: ', values);
 
+        const file = form.getValues('imageData');
+        if (file && file.size > 50000) {
+            toast.error('Image size too large');
+            return null;
+        }
+
+        // need to send form data because of image
+        const formData = new FormData();
+
+        formData.append("question", values.question);
+        if (values._id) formData.append("_id", values._id);
+        if (values.order !== undefined) formData.append("order", values.order.toString());
+        formData.append("subjectId", values.subjectId);
+        formData.append("lessonId", values.lessonId);
+        if (values.description) formData.append("description", values.description);
+        if (file) formData.append("imageData", file);
+        if (instituteYearList && instituteYearList.length > 0) formData.append("instituteIds", JSON.stringify(instituteYearList));
+
         startTransition(async () => {
-            await upsertAcademyMcq(values).then(res => {
+            await upsertAcademyMcq(formData).then(res => {
                 if (res.success) {
                     toast.success(res.success, {
                         duration: 5000,
@@ -189,7 +209,11 @@ const AcademyMcqEditPage = () => {
 
                 <div className="w-full">
                     <Form {...form}>
-                        <form onSubmit={form.handleSubmit(onSubmit, onInvalid)} className='space-y-4'>
+                        <form
+                            onSubmit={form.handleSubmit(onSubmit, onInvalid)}
+                            className='space-y-4'
+                            encType="multipart/form-data"
+                        >
                             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
 
                                 <div className="md:col-span-2">
@@ -299,6 +323,37 @@ const AcademyMcqEditPage = () => {
 
 
                                     </div>
+
+                                </div>
+
+                                <div className="col-span-2">
+                                    <FormLabel>
+                                        <Label className="my-2 text-2xl">Image</Label>
+                                    </FormLabel>
+
+                                    <FormField
+                                        control={form.control}
+                                        name="imageData"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>max size 200 kb</FormLabel>
+                                                <FormControl>
+                                                    <Input
+                                                        type="file"
+                                                        accept="image/*"
+                                                        onChange={(e) => {
+                                                            const file = e.target.files?.[0] ?? null;
+                                                            field.onChange(file);
+                                                        }}
+                                                        onBlur={field.onBlur}
+                                                        ref={field.ref}
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+
 
                                 </div>
 

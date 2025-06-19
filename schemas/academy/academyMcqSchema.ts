@@ -9,6 +9,7 @@ export const AcademyMcqSchema = z.object({
     subjectId: z.string(),
     lessonId: z.string(),
     description: z.string().optional(),
+    imageData:z.any().optional(),
 
     optionList: z
         .array(
