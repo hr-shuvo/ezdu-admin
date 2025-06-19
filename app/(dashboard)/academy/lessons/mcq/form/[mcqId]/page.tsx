@@ -143,6 +143,7 @@ const AcademyMcqEditPage = () => {
         if (values.description) formData.append("description", values.description);
         if (values.passage) formData.append("passage", values.passage);
         if (file) formData.append("imageData", file);
+        formData.append('optionList',JSON.stringify(values.optionList))
         if (instituteYearList && instituteYearList.length > 0) formData.append("instituteIds", JSON.stringify(instituteYearList));
 
         startTransition(async () => {

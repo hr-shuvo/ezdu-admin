@@ -20,6 +20,7 @@ import { loadAcademicInstitute } from "@/app/_services/academy/academyInstituteS
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { MultiSelect } from "@/components/ui/multi-select";
+import { Label } from "@/components/ui/label";
 
 const AcademyMcqCreatePage = () => {
     const searchParams = useSearchParams();
@@ -127,6 +128,7 @@ const AcademyMcqCreatePage = () => {
         if (values.description) formData.append("description", values.description);
         if (file) formData.append("imageData", file);
         if (instituteYearList && instituteYearList.length > 0) formData.append("instituteIds", JSON.stringify(instituteYearList));
+        formData.append('optionList',JSON.stringify(values.optionList))
 
 
         startTransition(async () => {
@@ -328,6 +330,37 @@ const AcademyMcqCreatePage = () => {
 
 
                                     </div>
+
+                                </div>
+
+                                <div className="col-span-2">
+                                    <FormLabel>
+                                        <Label className="my-2 text-2xl">Image</Label>
+                                    </FormLabel>
+
+                                    <FormField
+                                        control={form.control}
+                                        name="imageData"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>max size 200 kb</FormLabel>
+                                                <FormControl>
+                                                    <Input
+                                                        type="file"
+                                                        accept="image/*"
+                                                        className="w-full cursor-pointer bg-muted file:mr-4 file:rounded-md file:border-0 file:bg-primary file:px-4 file:py-2 file:text-white hover:file:bg-primary/80"
+                                                        onChange={(e) => {
+                                                            const file = e.target.files?.[0] ?? null;
+                                                            field.onChange(file);
+                                                        }}
+                                                        onBlur={field.onBlur}
+                                                        ref={field.ref}
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
 
                                 </div>
 
