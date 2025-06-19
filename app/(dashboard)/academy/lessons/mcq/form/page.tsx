@@ -29,6 +29,8 @@ const AcademyMcqCreatePage = () => {
     const lessonId = searchParams.get('lessonId');
     const subjectId = searchParams.get('subjectId');
 
+    const [imageUrl, setImageUrl] = useState();
+
     const [institutes, setInstitutes] = useState<any[]>([]);
     // const [modeltests, setModelTests] = useState<any[]>([]);
 
@@ -96,7 +98,7 @@ const AcademyMcqCreatePage = () => {
         // console.log(instituteYearList);
     }, [selectedInstituteIds, institutes])
 
-    useEffect(() =>{
+    useEffect(() => {
         // console.log(instituteYearList)
         setValue("instituteIds", instituteYearList);
 
@@ -105,12 +107,30 @@ const AcademyMcqCreatePage = () => {
     const { reset, setValue } = form;
 
     const onSubmit = (values: z.infer<typeof AcademyMcqSchema>) => {
-        console.log('upsert mcq: ', values);
+        // console.log('upsert mcq: ', values);
 
-        // return;
+        const file = form.getValues('imageData');
+        if (file && file.size > 50000) {
+            toast.error('Image size too large');
+            return null;
+        }
+
+        // need to send form data because of image
+        const formData = new FormData();
+
+        formData.append("question", values.question);
+        if (values._id) formData.append("_id", values._id);
+        if (values.order !== undefined) formData.append("order", values.order.toString());
+        formData.append("subjectId", values.subjectId);
+        formData.append("lessonId", values.lessonId);
+        if (values.passage) formData.append("passage", values.passage);
+        if (values.description) formData.append("description", values.description);
+        if (file) formData.append("imageData", file);
+        if (instituteYearList && instituteYearList.length > 0) formData.append("instituteIds", JSON.stringify(instituteYearList));
+
 
         startTransition(async () => {
-            await upsertAcademyMcq(values).then(res => {
+            await upsertAcademyMcq(formData).then(res => {
                 if (res.success) {
                     toast.success(res.success, {
                         duration: 5000,
@@ -192,6 +212,27 @@ const AcademyMcqCreatePage = () => {
                                                         {...field}
                                                         placeholder="Enter title"
                                                         type="text"
+                                                        disabled={isPending}
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
+
+
+                                <div className="col-span-4">
+                                    <FormField
+                                        control={form.control}
+                                        name="passage"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Passage</FormLabel>
+                                                <FormControl>
+                                                    <Textarea
+                                                        {...field}
+                                                        placeholder="Enter Passage"
                                                         disabled={isPending}
                                                     />
                                                 </FormControl>

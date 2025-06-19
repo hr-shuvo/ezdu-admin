@@ -141,6 +141,7 @@ const AcademyMcqEditPage = () => {
         formData.append("subjectId", values.subjectId);
         formData.append("lessonId", values.lessonId);
         if (values.description) formData.append("description", values.description);
+        if (values.passage) formData.append("passage", values.passage);
         if (file) formData.append("imageData", file);
         if (instituteYearList && instituteYearList.length > 0) formData.append("instituteIds", JSON.stringify(instituteYearList));
 
@@ -230,6 +231,26 @@ const AcademyMcqEditPage = () => {
                                                         {...field}
                                                         placeholder="Enter title"
                                                         type="text"
+                                                        disabled={isPending}
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
+
+                                <div className="col-span-4">
+                                    <FormField
+                                        control={form.control}
+                                        name="passage"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Passage</FormLabel>
+                                                <FormControl>
+                                                    <Textarea
+                                                        {...field}
+                                                        placeholder="Enter Passage"
                                                         disabled={isPending}
                                                     />
                                                 </FormControl>
