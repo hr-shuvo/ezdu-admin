@@ -15,12 +15,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { AcademicClassLevelType } from "@/utils/common";
 import { Separator } from "@/components/ui/separator";
 import {
-    loadAcademicSubject} from "@/app/_services/academy/academySubjectService";
+    loadAcademicSubject
+} from "@/app/_services/academy/academySubjectService";
 import { useBreadcrumb } from "@/components/common/breadcrumb";
 import { loadAcademicClass } from "@/app/_services/academy/academyClassService";
 import { AdmissionCategorySchema } from "@/schemas/academy/admission-category-schema";
 import { upsertAdmissionCategory } from "@/app/_services/admission/admission-category-service";
 import { MultiSelect } from "@/components/ui/multi-select";
+import { Textarea } from "@/components/ui/textarea";
 
 const AdmissionCategoryCreatePage = () => {
     const params = useParams();
@@ -44,7 +46,7 @@ const AdmissionCategoryCreatePage = () => {
 
     }, [setBreadcrumbList]);
 
-    
+
     const form = useForm<z.infer<typeof AdmissionCategorySchema>>({
         resolver: zodResolver(AdmissionCategorySchema),
         defaultValues: {
@@ -54,6 +56,8 @@ const AdmissionCategoryCreatePage = () => {
             segment: "ADMISSION",
             subjects: [],
             // order: 1,
+            pathTitle: "",
+            pathDescription: ""
         }
     });
 
@@ -148,7 +152,7 @@ const AdmissionCategoryCreatePage = () => {
         });
     }
 
-    const onInvalid = (err: any)=>{
+    const onInvalid = (err: any) => {
         console.error(err);
     }
 
@@ -212,6 +216,47 @@ const AdmissionCategoryCreatePage = () => {
                                                         {...field}
                                                         placeholder="Enter Id"
                                                         type="text"
+                                                        disabled={isPending}
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
+
+
+                                <div className='col-span-4 mt-2'>
+                                    <FormField
+                                        control={form.control}
+                                        name="pathTitle"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Learning Path Title (Heading)</FormLabel>
+                                                <FormControl>
+                                                    <Input
+                                                        {...field}
+                                                        placeholder="Enter Title"
+                                                        type="text"
+                                                        disabled={isPending}
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
+                                <div className='col-span-4 mt-2'>
+                                    <FormField
+                                        control={form.control}
+                                        name="pathDescription"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Learning Path Description (Heading)</FormLabel>
+                                                <FormControl>
+                                                    <Textarea
+                                                        {...field}
+                                                        placeholder="Enter Title"
                                                         disabled={isPending}
                                                     />
                                                 </FormControl>

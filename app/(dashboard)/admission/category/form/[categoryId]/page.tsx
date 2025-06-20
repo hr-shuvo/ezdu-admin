@@ -26,6 +26,7 @@ import { AdmissionCategorySchema } from "@/schemas/academy/admission-category-sc
 import { getAdmissionCategory, upsertAdmissionCategory } from "@/app/_services/admission/admission-category-service";
 import { MultiSelect } from "@/components/ui/multi-select";
 import { Badge } from "@/components/ui/badge";
+import { Textarea } from "@/components/ui/textarea";
 
 const AdmissionCategoryEditPage = () => {
     const params = useParams();
@@ -60,6 +61,8 @@ const AdmissionCategoryEditPage = () => {
             segment: "",
             subjects: [],
             // order: 1,
+            pathTitle:"",
+            pathDescription:""
         }
     });
 
@@ -164,7 +167,7 @@ const AdmissionCategoryEditPage = () => {
 
                 <div className="flex justify-between">
                     <div>
-                        <h1 className="text-5xl font-bold">Edit - Admission Category</h1>
+                        <h1 className="text-5xl font-bold">Edit - Admission Category (p)</h1>
                     </div>
                     <div>
                         <Link href="../">
@@ -217,6 +220,46 @@ const AdmissionCategoryEditPage = () => {
                                                         {...field}
                                                         placeholder="Enter Id"
                                                         type="text"
+                                                        disabled={isPending}
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
+
+                                <div className='col-span-4 mt-2'>
+                                    <FormField
+                                        control={form.control}
+                                        name="pathTitle"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Learning Path Title (Heading)</FormLabel>
+                                                <FormControl>
+                                                    <Input
+                                                        {...field}
+                                                        placeholder="Enter Title"
+                                                        type="text"
+                                                        disabled={isPending}
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
+                                <div className='col-span-4 mt-2'>
+                                    <FormField
+                                        control={form.control}
+                                        name="pathDescription"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Learning Path Description (Heading)</FormLabel>
+                                                <FormControl>
+                                                    <Textarea
+                                                        {...field}
+                                                        placeholder="Enter Title"
                                                         disabled={isPending}
                                                     />
                                                 </FormControl>

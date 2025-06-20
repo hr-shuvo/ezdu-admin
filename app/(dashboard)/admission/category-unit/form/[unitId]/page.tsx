@@ -23,9 +23,10 @@ import {
 import { useBreadcrumb } from "@/components/common/breadcrumb";
 import { loadAcademicClass } from "@/app/_services/academy/academyClassService";
 import { AdmissionCategorySchema, AdmissionCategoryUnitSchema } from "@/schemas/academy/admission-category-schema";
-import { getAdmissionCategoryUnit, loadAdmissionCategory, upsertAdmissionCategory } from "@/app/_services/admission/admission-category-service";
+import { getAdmissionCategoryUnit, loadAdmissionCategory, upsertAdmissionCategory, upsertAdmissionCategoryUnit } from "@/app/_services/admission/admission-category-service";
 import { MultiSelect } from "@/components/ui/multi-select";
 import { Badge } from "@/components/ui/badge";
+import { Textarea } from "@/components/ui/textarea";
 
 const AdmissionCategoryUnitEditPage = () => {
     const params = useParams();
@@ -63,6 +64,8 @@ const AdmissionCategoryUnitEditPage = () => {
             segment: "",
             subjects: [],
             // order: 1,
+            pathTitle: "",
+            pathDescription: ""
         }
     });
 
@@ -127,7 +130,7 @@ const AdmissionCategoryUnitEditPage = () => {
     }, [classId]);
 
 
-    const onSubmit = async (values: z.infer<typeof AdmissionCategorySchema>) => {
+    const onSubmit = async (values: z.infer<typeof AdmissionCategoryUnitSchema>) => {
 
         const normalizedValues = {
             ...values,
@@ -138,7 +141,7 @@ const AdmissionCategoryUnitEditPage = () => {
         // return;
 
         startTransition(async () => {
-            await upsertAdmissionCategory(normalizedValues).then(res => {
+            await upsertAdmissionCategoryUnit(normalizedValues).then(res => {
                 if (res.success) {
                     toast.success(res.success, {
                         duration: 5000,
@@ -232,6 +235,46 @@ const AdmissionCategoryUnitEditPage = () => {
                                     />
                                 </div>
 
+
+                                <div className='col-span-4 mt-2'>
+                                    <FormField
+                                        control={form.control}
+                                        name="pathTitle"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Learning Path Title (Heading)</FormLabel>
+                                                <FormControl>
+                                                    <Input
+                                                        {...field}
+                                                        placeholder="Enter Title"
+                                                        type="text"
+                                                        disabled={isPending}
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
+                                <div className='col-span-4 mt-2'>
+                                    <FormField
+                                        control={form.control}
+                                        name="pathDescription"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Learning Path Description (Heading)</FormLabel>
+                                                <FormControl>
+                                                    <Textarea
+                                                        {...field}
+                                                        placeholder="Enter Title"
+                                                        disabled={isPending}
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
 
                                 <div className="col-span-4 md:col-span-2 mt-2">
                                     <FormField

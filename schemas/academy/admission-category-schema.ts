@@ -13,8 +13,10 @@ export const AdmissionCategorySchema = z.object({
         message: 'Segment is required'
     }),
     subjects: z.array(z.any()).optional(),
-});
+    pathTitle: z.string(),
+    pathDescription: z.string().optional(),
 
+});
 
 export const AdmissionCategoryUnitSchema = z.object({
     _id: z.string().optional(),
@@ -32,4 +34,6 @@ export const AdmissionCategoryUnitSchema = z.object({
         message: 'Segment is required'
     }),
     subjects: z.array(z.any()).optional(),
+    pathTitle: z.string(),
+    pathDescription: z.string().optional(),
 });
