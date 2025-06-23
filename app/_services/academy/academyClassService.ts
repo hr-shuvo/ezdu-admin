@@ -52,6 +52,6 @@ export const upsertAcademyClass = async (model: any) => {
         // console.error(err.message);
         // console.error(err);
 
-        return {error: err.response?.data?.msg};
+        return {error: err.response?.data?.msg || err.response?.data?.message};
     }
 };

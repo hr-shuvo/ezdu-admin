@@ -1,8 +1,8 @@
 'use client'
 
 import { useParams, useRouter } from "next/navigation";
-import { useEffect, useState, useTransition } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { useEffect, useTransition } from "react";
+import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
@@ -24,7 +24,7 @@ const AcademyClassEditPage = () => {
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
 
-    const [showGroup, setShowGroup] = useState(false);
+    // const [showGroup, setShowGroup] = useState(false);
 
     const form = useForm<z.infer<typeof AcademyClassSchema>>({
         resolver: zodResolver(AcademyClassSchema),
@@ -86,7 +86,7 @@ const AcademyClassEditPage = () => {
 
     const handleSegmentChange = (val: string) => {
         // console.log(val)
-        setShowGroup(val === 'SSC' || val === 'HSC')
+        // setShowGroup(val === 'SSC' || val === 'HSC')
     }
 
     return (

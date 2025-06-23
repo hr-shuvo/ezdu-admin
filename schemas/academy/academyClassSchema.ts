@@ -15,6 +15,6 @@ export const AcademyClassSchema = z.object({
     segment: z.string().min(3, {
         message: 'Title is required'
     }),
-    groups: z.array(z.string()),
-    hasBatch: z.boolean()
+    groups: z.array(z.string()).optional(),
+    hasBatch: z.boolean().optional()
 });

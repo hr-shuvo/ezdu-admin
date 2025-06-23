@@ -14,8 +14,9 @@ import { Input } from "@/components/ui/input";
 import { AcademyClassSchema } from "@/schemas/academy/academyClassSchema";
 import { upsertAcademyClass } from "@/app/_services/academy/academyClassService";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { AcademicClassLevelType } from "@/utils/common";
+import { AcademicClassLevelType, AcademyGroupType, AcademySegmentType } from "@/utils/common";
 import { Separator } from "@/components/ui/separator";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const AcademyClassCreatePage = () => {
     const router = useRouter();
@@ -24,15 +25,23 @@ const AcademyClassCreatePage = () => {
     const form = useForm<z.infer<typeof AcademyClassSchema>>({
         resolver: zodResolver(AcademyClassSchema),
         defaultValues: {
+            id: "",
             title: "",
             level: "",
             // order: 1,
             version: "BN",
+            segment: "JUNIOR"
         }
     });
 
+    const handleSegmentChange = (val: string) => {
+        // console.log(val)
+        // setShowGroup(val === 'SSC' || val === 'HSC')
+    }
+
     const onSubmit = async (values: z.infer<typeof AcademyClassSchema>) => {
 
+        // console.log(values);
         startTransition(async () => {
             await upsertAcademyClass(values).then(res => {
                 if (res.success) {
@@ -59,6 +68,10 @@ const AcademyClassCreatePage = () => {
         });
     }
 
+    const onInvalid = (err:any)=>{
+        console.error(err)
+    }
+
 
     return (
         <>
@@ -71,26 +84,47 @@ const AcademyClassCreatePage = () => {
                     <div>
                         <Link href="./">
                             <Button size='sm' variant='sidebarOutline'>
-                                <BiArrowBack/><span> Back</span>
+                                <BiArrowBack /><span> Back</span>
                             </Button>
                         </Link>
 
                     </div>
                 </div>
 
-                <Separator className='my-5'/>
+                <Separator className='my-5' />
 
                 <div className="w-full mt-5">
 
                     <Form {...form}>
-                        <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
+                        <form onSubmit={form.handleSubmit(onSubmit, onInvalid)} className='space-y-4'>
                             <div className="grid grid-cols-4 gap-4">
 
                                 <div className='col-span-4 md:col-span-2'>
                                     <FormField
                                         control={form.control}
+                                        name="id"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Unique name *</FormLabel>
+                                                <FormControl>
+                                                    <Input
+                                                        {...field}
+                                                        placeholder="Enter unique id"
+                                                        type="text"
+                                                        disabled={isPending}
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
+
+                                <div className='col-span-4 md:col-span-2'>
+                                    <FormField
+                                        control={form.control}
                                         name="title"
-                                        render={({field}) => (
+                                        render={({ field }) => (
                                             <FormItem>
                                                 <FormLabel>Title *</FormLabel>
                                                 <FormControl>
@@ -101,7 +135,7 @@ const AcademyClassCreatePage = () => {
                                                         disabled={isPending}
                                                     />
                                                 </FormControl>
-                                                <FormMessage/>
+                                                <FormMessage />
                                             </FormItem>
                                         )}
                                     />
@@ -111,7 +145,7 @@ const AcademyClassCreatePage = () => {
                                     <FormField
                                         control={form.control}
                                         name="level"
-                                        render={({field}) => (
+                                        render={({ field }) => (
                                             <FormItem>
                                                 <FormLabel>Select Level *</FormLabel>
                                                 <Select
@@ -121,13 +155,13 @@ const AcademyClassCreatePage = () => {
                                                     disabled={isPending}
                                                 >
                                                     <SelectTrigger className={'w-full'}>
-                                                        <SelectValue placeholder={"Select Level"}/>
+                                                        <SelectValue placeholder={"Select Level"} />
                                                     </SelectTrigger>
                                                     <SelectContent>
                                                         {
                                                             AcademicClassLevelType.map((item) => (
                                                                 <SelectItem value={item.value}
-                                                                            key={item.value}>{item.text}</SelectItem>
+                                                                    key={item.value}>{item.text}</SelectItem>
                                                             ))
                                                         }
 
@@ -145,7 +179,7 @@ const AcademyClassCreatePage = () => {
                                     <FormField
                                         control={form.control}
                                         name="version"
-                                        render={({field}) => (
+                                        render={({ field }) => (
                                             <FormItem>
                                                 <FormLabel>Select Version</FormLabel>
                                                 <Select
@@ -155,7 +189,7 @@ const AcademyClassCreatePage = () => {
                                                     disabled={isPending}
                                                 >
                                                     <SelectTrigger className={'w-full'}>
-                                                        <SelectValue placeholder={"Select Version"}/>
+                                                        <SelectValue placeholder={"Select Version"} />
                                                     </SelectTrigger>
                                                     <SelectContent>
                                                         <SelectItem value={"BN"}>Bangla</SelectItem>
@@ -170,6 +204,84 @@ const AcademyClassCreatePage = () => {
                                     />
 
                                 </div>
+
+
+
+                                <div className='col-span-4 md:col-span-1'>
+                                    <FormField
+                                        control={form.control}
+                                        name="segment"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Select Segment *</FormLabel>
+                                                <Select
+                                                    name={field.name}
+                                                    onValueChange={(val) => {
+                                                        field.onChange(val)
+                                                        handleSegmentChange(val)
+                                                    }}
+                                                    value={field.value}
+                                                    disabled={isPending}
+                                                >
+                                                    <SelectTrigger className={'w-full'}>
+                                                        <SelectValue placeholder={"Select Level"} />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        {
+                                                            AcademySegmentType.map((item) => (
+                                                                <SelectItem value={item.value}
+                                                                    key={item.value}>{item.text}</SelectItem>
+                                                            ))
+                                                        }
+
+                                                    </SelectContent>
+
+                                                </Select>
+
+                                            </FormItem>
+                                        )}
+                                    />
+
+                                </div>
+
+
+                                <div className="col-span-4 md:col-span-2">
+                                    <FormField
+                                        control={form.control}
+                                        name="groups"
+                                        // defaultValue={[]}
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Select Groups</FormLabel>
+                                                <div className="flex justify-between items-center gap-2">
+                                                    {AcademyGroupType.map((group) => (
+                                                        <FormItem key={group.value} className="flex items-center space-x-2 border p-2 cursor-pointer w-1/3">
+                                                            <Checkbox
+                                                                id={group.value}
+                                                                checked={field.value?.includes(group.value)}
+                                                                onCheckedChange={(checked) => {
+                                                                    const newValue = checked
+                                                                        ? [...(field.value || []), group.value]
+                                                                        : (field.value || []).filter((v) => v !== group.value);
+                                                                    field.onChange(newValue);
+                                                                }}
+                                                            />
+                                                            <label htmlFor={group.value} className="text-sm cursor-pointer w-full">
+                                                                {group.text}
+                                                            </label>
+                                                        </FormItem>
+                                                    ))}
+                                                </div>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+
+
+                                </div>
+
+
+
 
                                 <div className='col-span-2'>
                                     <div className="col-span-2 mt-5 flex justify-end gap-2">
