@@ -2,6 +2,9 @@ import * as z from "zod";
 
 export const AcademyClassSchema = z.object({
     _id: z.string().optional(),
+    id: z.string().min(1, {
+        message: 'Unique id is required'
+    }),
     title: z.string().min(1, {
         message: 'Title is required'
     }),
@@ -9,4 +12,9 @@ export const AcademyClassSchema = z.object({
     level: z.string().min(3, {
         message: 'Title is required'
     }),
+    segment: z.string().min(3, {
+        message: 'Title is required'
+    }),
+    groups: z.array(z.string()),
+    hasBatch: z.boolean()
 });

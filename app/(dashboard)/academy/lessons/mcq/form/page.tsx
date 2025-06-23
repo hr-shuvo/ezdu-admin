@@ -48,6 +48,8 @@ const AcademyMcqCreatePage = () => {
             optionList: [
                 { text: "", correct: false },
                 { text: "", correct: false },
+                { text: "", correct: false },
+                { text: "", correct: false },
             ]
         }
     });
