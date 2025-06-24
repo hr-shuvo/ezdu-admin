@@ -114,6 +114,7 @@ const AcademyClassPage = () => {
                                                 <TableHead className='text-center'>Sl</TableHead>
                                                 <TableHead className='text-center'>Title</TableHead>
                                                 <TableHead className='text-center'>Level</TableHead>
+                                                <TableHead className='text-center'>Segment</TableHead>
                                                 <TableHead className='text-center'>Action</TableHead>
                                             </TableRow>
                                         </TableHeader>
@@ -128,6 +129,7 @@ const AcademyClassPage = () => {
                                                                 className='border-r text-center'>{(currentPage - 1) * pageSize + index + 1}</TableCell>
                                                             <TableCell className='border-r'>{data.title}</TableCell>
                                                             <TableCell className='border-r'>{data.level}</TableCell>
+                                                            <TableCell className='border-r'>{data.segment}</TableCell>
                                                             <TableCell>
                                                                 <div className="flex justify-center gap-1">
                                                                     <Link href={`../classes/${data._id}`}><Button
