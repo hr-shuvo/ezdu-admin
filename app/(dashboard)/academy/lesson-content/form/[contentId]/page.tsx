@@ -21,9 +21,11 @@ import {
 import { useBreadcrumb } from "@/components/common/breadcrumb";
 import { loadAcademicClass } from "@/app/_services/academy/academyClassService";
 import {
-    loadAcademicLesson} from "@/app/_services/academy/academyLessonService";
+    loadAcademicLesson
+} from "@/app/_services/academy/academyLessonService";
 import { AcademyLessonContentSchema } from "@/schemas/academy/academyLessonContentSchema";
 import { getAcademyLessonContent, upsertAcademyLessonContent } from "@/app/_services/academy/academyLessonContentService";
+import { RichTextEditor } from "@/components/rich-text-editor";
 
 const AcademyLessonEditPage = () => {
     const params = useParams();
@@ -247,10 +249,8 @@ const AcademyLessonEditPage = () => {
                                             <FormItem>
                                                 <FormLabel>Description</FormLabel>
                                                 <FormControl>
-                                                    <Textarea
+                                                    <RichTextEditor
                                                         {...field}
-                                                        placeholder="Enter description"
-                                                        disabled={isPending}
                                                     />
                                                 </FormControl>
                                                 <FormMessage />

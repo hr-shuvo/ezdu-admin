@@ -214,8 +214,8 @@ const AcademyLessonContentPage = () => {
                                                         <TableRow key={data._id}>
                                                             <TableCell
                                                                 className='border-r text-center'>{(currentPage - 1) * pageSize + index + 1}</TableCell>
-                                                            <TableCell className='border-r '>{data.title}</TableCell>
-                                                            <TableCell className='border-r '>{data.lesson.title}</TableCell>
+                                                            <TableCell className='border-r '>{data?.title}</TableCell>
+                                                            <TableCell className='border-r '>{data.lesson?.title}</TableCell>
 
                                                             <TableCell>
                                                                 <div className="flex justify-center gap-1">

@@ -24,6 +24,7 @@ import {
     loadAcademicLesson} from "@/app/_services/academy/academyLessonService";
 import { AcademyLessonContentSchema } from "@/schemas/academy/academyLessonContentSchema";
 import { upsertAcademyLessonContent } from "@/app/_services/academy/academyLessonContentService";
+import { RichTextEditor } from "@/components/rich-text-editor";
 
 const AcademyLessonCreatePage = () => {
     // const params = useParams();
@@ -204,10 +205,8 @@ const AcademyLessonCreatePage = () => {
                                             <FormItem>
                                                 <FormLabel>Description</FormLabel>
                                                 <FormControl>
-                                                    <Textarea
+                                                    <RichTextEditor
                                                         {...field}
-                                                        placeholder="Enter description"
-                                                        disabled={isPending}
                                                     />
                                                 </FormControl>
                                                 <FormMessage />
@@ -263,7 +262,7 @@ const AcademyLessonCreatePage = () => {
                                                 {
                                                     classes.map((item: { _id: string, title: string }) => (
                                                         <SelectItem value={item._id}
-                                                            key={item._id}>{item.title}</SelectItem>
+                                                            key={item._id}>{item?.title}</SelectItem>
                                                     ))
                                                 }
 
@@ -294,7 +293,7 @@ const AcademyLessonCreatePage = () => {
                                                 {
                                                     subjects.map((item: { _id: string, title: string }) => (
                                                         <SelectItem value={item._id}
-                                                            key={item._id}>{item.title}</SelectItem>
+                                                            key={item._id}>{item?.title}</SelectItem>
                                                     ))
                                                 }
 
@@ -329,7 +328,7 @@ const AcademyLessonCreatePage = () => {
                                                         {
                                                             lessons.map((item: { _id: string, title: string }) => (
                                                                 <SelectItem value={item._id}
-                                                                    key={item._id}>{item.title}</SelectItem>
+                                                                    key={item._id}>{item?.title}</SelectItem>
                                                             ))
                                                         }
 
