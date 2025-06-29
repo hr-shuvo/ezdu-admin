@@ -54,6 +54,7 @@ const AcademyModelTestPage = () => {
             setTotalCount(response.totalCount);
             setTotalPage(response.totalPage);
             setCurrentPage(response.currentPage);
+            console.log(response.data)
 
         })
     }, [currentPage, pageSize, instituteId, subjectId]);

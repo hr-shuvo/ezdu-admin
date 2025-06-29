@@ -20,6 +20,9 @@ export const AcademyModelTestSchema = z.object({
     subTitle: z.string(),
     description: z.string().optional(),
     instituteId: z.string().optional(),
-    subjectId: z.string(),
+    subjectId: z.string().min(1, {
+        message: 'Subject is required'
+    }),
+    year: z.string()
     
 });

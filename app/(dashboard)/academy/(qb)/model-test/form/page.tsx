@@ -20,6 +20,7 @@ import { AcademyModelTestSchema } from "@/schemas/academy/academyQuestionBankSch
 import { loadAcademicInstitute, upsertAcademyModelTest } from "@/app/_services/academy/academyInstituteService";
 import { Textarea } from "@/components/ui/textarea";
 import { loadAcademicSubject } from "@/app/_services/academy/academySubjectService";
+import { RecentYears } from "@/utils/constants";
 
 const AcademyModelTestCreatePage = () => {
     const params = useParams();
@@ -50,6 +51,7 @@ const AcademyModelTestCreatePage = () => {
             subTitle: "",
             subjectId: "",
             instituteId: "",
+            year: "",
             // order: 1,
         }
     });
@@ -65,7 +67,7 @@ const AcademyModelTestCreatePage = () => {
             setClasses(_classes.data);
 
             const _subjects = await loadAcademicSubject(1, 100, level, classId);
-            setSubjects(_subjects.data.filter((s: any) => s._id !== params.subjectId));  
+            setSubjects(_subjects.data.filter((s: any) => s._id !== params.subjectId));
         });
 
     }, []);
@@ -120,7 +122,7 @@ const AcademyModelTestCreatePage = () => {
         });
     }
 
-    const onInvalid = (err:any)=>{
+    const onInvalid = (err: any) => {
         console.error(err)
 
     }
@@ -346,6 +348,46 @@ const AcademyModelTestCreatePage = () => {
                                     />
 
                                 </div>
+
+                                <div className='col-span-4 md:col-span-1 mt-2'>
+                                    <FormField
+                                        control={form.control}
+                                        name="year"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Select Year</FormLabel>
+                                                <Select
+                                                    name={field.name}
+                                                    onValueChange={field.onChange}
+                                                    value={field.value}
+                                                    disabled={isPending}
+                                                >
+                                                    <SelectTrigger className={'w-full'}>
+                                                        <SelectValue
+                                                            placeholder={"Select Year"}
+                                                        />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        {
+                                                            RecentYears.map((item, index) => (
+                                                                <SelectItem value={item.toString()}
+                                                                    key={index}>{item}</SelectItem>
+                                                            ))
+                                                        }
+
+                                                    </SelectContent>
+
+                                                </Select>
+
+                                            </FormItem>
+                                        )}
+                                    />
+
+                                </div>
+
+
+
+
 
                                 <div className='col-span-2'>
                                     <div className="col-span-2 mt-5 flex justify-end gap-2">
