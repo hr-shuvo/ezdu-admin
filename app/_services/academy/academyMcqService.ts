@@ -2,7 +2,7 @@ import httpClient from "@/app/utils/httpClient";
 import { PaginatedList } from "@/app/utils/pagination";
 
 
-export const loadAcamemicMcq = async (page: number, size: number, subjectId?: string, lessonId?: string): Promise<PaginatedList> => {
+export const loadAcamemicMcq = async (page: number, size: number, subjectId?: string, lessonId?: string, instituteIds?:string[]): Promise<PaginatedList> => {
     try {
         const params: Record<string, any> = {
             pg: page,
@@ -15,6 +15,10 @@ export const loadAcamemicMcq = async (page: number, size: number, subjectId?: st
 
         if (lessonId) {
             params.lessonId = lessonId;
+        }
+
+        if(instituteIds && instituteIds.length > 0){
+          params.instituteIds = instituteIds;
         }
 
         const response = await httpClient.get<PaginatedList>("/academy/mcq", {params: params});

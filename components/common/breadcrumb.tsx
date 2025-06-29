@@ -48,10 +48,10 @@ export const CustomBreadcrumb = () => {
                         breadcrumbList.map((b, i) => (
                             <React.Fragment key={i}>
                                 {i != 0 && (
-                                    <BreadcrumbSeparator className="hidden md:block"/>
+                                    <BreadcrumbSeparator className="hidden sm:block"/>
                                 )}
 
-                                <BreadcrumbItem className="hidden md:block">
+                                <BreadcrumbItem className="hidden sm:block">
                                     <BreadcrumbLink href="#">
                                         {b.title}
                                     </BreadcrumbLink>

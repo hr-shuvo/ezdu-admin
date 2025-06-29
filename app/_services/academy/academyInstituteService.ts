@@ -70,6 +70,10 @@ export const loadAcademicModelTest = async (page: number, size: number, subjectI
             params.subjectId = subjectId;
         }
 
+        if(instituteId){
+            params.instituteId = instituteId;
+        }
+
         const response = await httpClient.get<PaginatedList>("/academy/qb/modeltest", {params: params});
 
         return response.data;

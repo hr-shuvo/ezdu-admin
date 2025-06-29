@@ -78,7 +78,7 @@ export const SidebarMenuList = {
                     url: "/academy/institutes",
                 },
                 {
-                    title: "Model Test",
+                    title: "Model Test & MCQ",
                     url: "/academy/model-test",
                 },
             ],

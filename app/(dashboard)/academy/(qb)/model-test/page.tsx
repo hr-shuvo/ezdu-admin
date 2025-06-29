@@ -6,16 +6,15 @@ import Loading from "@/app/(dashboard)/modules/loading";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Eye, Pencil, PlusCircle, Trash } from "lucide-react";
-import { TiTick } from "react-icons/ti";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import CustomPagination from "@/components/common/pagination";
 import { AcademicClassLevelType } from "@/utils/common";
-import { loadAcademicLesson } from "@/app/_services/academy/academyLessonService";
 import { loadAcademicClass } from "@/app/_services/academy/academyClassService";
 import { loadAcademicSubject } from "@/app/_services/academy/academySubjectService";
 import { loadAcademicInstitute, loadAcademicModelTest } from "@/app/_services/academy/academyInstituteService";
+import { TiTick } from "react-icons/ti";
 
 const AcademyModelTestPage = () => {
     const { setBreadcrumbList } = useBreadcrumb();
@@ -86,8 +85,9 @@ const AcademyModelTestPage = () => {
                 <div className='w-full my-5 p-5 border'>
 
                     <div className="flex justify-between mt-5">
-                        <div>
+                        <div >
                             <h1 className="text-5xl font-bold">Model Test List</h1>
+                            <p  className="text-sm mt-2">( Filter by Subject & Board )</p>
                         </div>
                         <div>
                             <Link href="./model-test/form">
@@ -200,6 +200,7 @@ const AcademyModelTestPage = () => {
                                             <TableRow>
                                                 <TableHead className='text-center'>Sl</TableHead>
                                                 <TableHead className='text-center'>Title</TableHead>
+                                                <TableHead className='text-center'>Year</TableHead>
                                                 <TableHead className='text-center'>Action</TableHead>
                                             </TableRow>
                                         </TableHeader>
@@ -213,6 +214,7 @@ const AcademyModelTestPage = () => {
                                                             <TableCell
                                                                 className='border-r text-center'>{(currentPage - 1) * pageSize + index + 1}</TableCell>
                                                             <TableCell className='border-r '>{data.title}</TableCell>
+                                                            <TableCell className='border-r '>{data.year}</TableCell>
 
                                                             <TableCell>
                                                                 <div className="flex justify-center gap-1">
@@ -229,6 +231,13 @@ const AcademyModelTestPage = () => {
                                                                     <Link href={'#'}><Button
                                                                         variant='destructiveOutline'
                                                                         size='sm'><span><Trash /></span></Button>
+                                                                    </Link>
+
+                                                                    <Link href={`./model-test/mcq?modelTestId=${data._id}`}><Button
+                                                                        variant='secondary'
+                                                                        size='sm'>
+                                                                        <span><TiTick /></span> MCQ
+                                                                    </Button>
                                                                     </Link>
 
 
