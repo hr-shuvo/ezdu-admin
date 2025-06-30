@@ -56,7 +56,7 @@ const ModelTestMcqPage = () => {
             // console.log(_instituteIds)
             
             startTransition(async () => {
-                const _mcqList = await loadAcamemicMcq(currentPage, pageSize, subjectId!,"", _instituteIds);
+                const _mcqList = await loadAcamemicMcq(currentPage, pageSize, subjectId!,"", _instituteIds, modelTest.year);
                 setMcqList(_mcqList.data);
                 setTotalCount(_mcqList.totalCount);
                 setTotalPage(_mcqList.totalPage);
@@ -158,7 +158,7 @@ const ModelTestMcqPage = () => {
                             <h1 className="text-lg">Mcq List</h1>
                         </div>
                         <div>
-                            <Link href={`./mcq/form?modelTestId=${modelTestId}&subjectId=${subjectId}`}>
+                            <Link href={`./mcq/form?modelTestId=${modelTestId}`}>
                                 <Button size='sm' variant='sidebarOutline'>
                                     <PlusCircle /><span> Add</span>
                                 </Button>
@@ -216,7 +216,7 @@ const ModelTestMcqPage = () => {
                                                                 variant='default'
                                                                 size='sm'><Eye /></Button></Link>
 
-                                                            <Link href={`./mcq/form/${data._id}?lessonId=${modelTestId}`}><Button
+                                                            <Link href={`./mcq/form/${data._id}?modelTestId=${modelTestId}`}><Button
                                                                 variant='default'
                                                                 size='sm'><span><Pencil /></span></Button></Link>
 

@@ -7,7 +7,7 @@ export const AcademyMcqSchema = z.object({
     }),
     order: z.number().optional(),
     subjectId: z.string(),
-    lessonId: z.string(),
+    lessonId: z.string().optional(),
     passage: z.string().optional(),
     description: z.string().optional(),
     imageData:z.any().optional(),

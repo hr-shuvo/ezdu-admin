@@ -199,6 +199,7 @@ const AcademyModelTestPage = () => {
                                         <TableHeader>
                                             <TableRow>
                                                 <TableHead className='text-center'>Sl</TableHead>
+                                                <TableHead className='text-center'>Subject</TableHead>
                                                 <TableHead className='text-center'>Title</TableHead>
                                                 <TableHead className='text-center'>Year</TableHead>
                                                 <TableHead className='text-center'>Action</TableHead>
@@ -213,6 +214,7 @@ const AcademyModelTestPage = () => {
                                                         <TableRow key={data._id}>
                                                             <TableCell
                                                                 className='border-r text-center'>{(currentPage - 1) * pageSize + index + 1}</TableCell>
+                                                            <TableCell className='border-r '>{data?.subject?.title}</TableCell>
                                                             <TableCell className='border-r '>{data.title}</TableCell>
                                                             <TableCell className='border-r '>{data.year}</TableCell>
 
