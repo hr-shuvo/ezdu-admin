@@ -139,7 +139,7 @@ const AcademyMcqEditPage = () => {
         if (values._id) formData.append("_id", values._id);
         if (values.order !== undefined) formData.append("order", values.order.toString());
         formData.append("subjectId", values.subjectId);
-        formData.append("lessonId", values.lessonId);
+        if (values.lessonId !== undefined) formData.append("lessonId", values.lessonId);
         if (values.description) formData.append("description", values.description);
         if (values.passage) formData.append("passage", values.passage);
         if (file) formData.append("imageData", file);

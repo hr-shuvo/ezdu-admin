@@ -125,12 +125,12 @@ const AcademyMcqCreatePage = () => {
         if (values._id) formData.append("_id", values._id);
         if (values.order !== undefined) formData.append("order", values.order.toString());
         formData.append("subjectId", values.subjectId);
-        formData.append("lessonId", values.lessonId);
+        if (values.lessonId !== undefined) formData.append("lessonId", values.lessonId);
         if (values.passage) formData.append("passage", values.passage);
         if (values.description) formData.append("description", values.description);
         if (file) formData.append("imageData", file);
         if (instituteYearList && instituteYearList.length > 0) formData.append("instituteIds", JSON.stringify(instituteYearList));
-        formData.append('optionList',JSON.stringify(values.optionList))
+        formData.append('optionList', JSON.stringify(values.optionList))
 
 
         startTransition(async () => {
