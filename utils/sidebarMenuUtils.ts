@@ -1,6 +1,6 @@
 import {
     BookOpen,
-    Bot,
+    Bot, FileText,
     Frame,
     GalleryVerticalEnd, Map, PieChart,
     Settings2,
@@ -124,6 +124,11 @@ export const SidebarMenuList = {
         },
     ],
     projects: [
+        {
+            name: "Blog",
+            url: "/blog",
+            icon: FileText ,
+        },
         {
             name: "Design Engineering",
             url: "#",
