@@ -4,6 +4,11 @@ import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import TextAlign from "@tiptap/extension-text-align";
 import Highlight from '@tiptap/extension-highlight';
+import { Image } from '@tiptap/extension-image';
+import { Table } from '@tiptap/extension-table';
+import { TableCell } from '@tiptap/extension-table-cell';
+import { TableHeader } from '@tiptap/extension-table-header';
+import { TableRow } from "@tiptap/extension-table-row";
 
 import { MenuBar } from './menu-bar';
 import { forwardRef, useEffect, useImperativeHandle } from 'react';
@@ -15,6 +20,28 @@ type Props = {
     name?: string
     disabled?:boolean
 }
+
+const CustomTable = Table.extend({
+    addAttributes() {
+        return {
+            ...this.parent?.(),
+            class: {
+                default: null,
+                parseHTML: element => element.getAttribute('class'),
+                renderHTML: attributes => {
+                    return attributes.class ? { class: attributes.class } : {};
+                },
+            },
+            style: {
+                default: null,
+                parseHTML: element => element.getAttribute('style'),
+                renderHTML: attributes => {
+                    return attributes.style ? { style: attributes.style } : {};
+                },
+            },
+        };
+    },
+});
 
 export const RichTextEditor = forwardRef<HTMLDivElement, Props>(
 
@@ -37,6 +64,27 @@ export const RichTextEditor = forwardRef<HTMLDivElement, Props>(
                     types: ["heading", "paragraph"],
                 }),
                 Highlight,
+
+                Image.configure({
+                    inline: true,
+                    allowBase64: true,
+                    HTMLAttributes: {
+                        class: "max-w-full h-auto",
+                        style: "max-width: 100%; height: auto;"
+                    }
+                }),
+
+                CustomTable.configure({
+                    resizable: true,
+                    // HTMLAttributes: {
+                    //     class: " border-collapse border border-gray-300",
+                    //     style: "border-collapse: collapse; width: 100%;"
+                    // }
+                }),
+                TableRow,
+                TableHeader,
+                TableCell,
+
             ],
             content: '',
             editorProps: {

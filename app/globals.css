@@ -134,3 +134,25 @@ h2 {
 h3 {
   font-size: 1.1rem;
 }
+
+.ProseMirror table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  table-layout: auto;
+}
+
+.ProseMirror table th,
+.ProseMirror table td {
+  border: 1px solid #e5e7eb; /* Tailwind gray-200 */
+  padding: 0.5rem 1rem;
+  text-align: left;
+}
+
+.ProseMirror table tr:nth-child(even) {
+  background-color: #f9fafb; /* Tailwind gray-50 for zebra striping */
+}
+
+.ProseMirror table tr:hover {
+  background-color: #f3f4f6; /* Tailwind gray-100 on hover */
+}

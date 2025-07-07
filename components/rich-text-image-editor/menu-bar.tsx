@@ -6,11 +6,11 @@ import {
     Heading1,
     Heading2,
     Heading3,
-    Highlighter,
+    Highlighter, ImageIcon,
     Italic,
     List,
-    ListOrdered,
-    Strikethrough,
+    ListOrdered, Minus, MinusSquare, Plus, PlusIcon, PlusSquare,
+    Strikethrough, TableIcon, Trash, TrashIcon,
 } from "lucide-react";
 import { Toggle } from "../ui/toggle";
 import { Editor } from "@tiptap/react";
@@ -21,6 +21,54 @@ export const MenuBar = ({ editor }: { editor: Editor | null }) => {
     }
 
     const Options = [
+        {
+            icon: <ImageIcon className="size-4" />, // replace with your Lucide icon
+            onClick: () => {
+                const url = window.prompt("Enter image URL");
+                if (url) {
+                    editor.chain().focus().setImage({ src: url }).run();
+                }
+            },
+            preesed: false, // images aren't toggles
+        },
+
+
+        {
+            icon: <TableIcon className="size-4" />,
+            onClick: () => {
+                editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run();
+            },
+            preesed: false,
+        },
+        {
+            icon: <PlusSquare className="size-4" />, // Lucide icon for "add row"
+            onClick: () => editor.chain().focus().addRowAfter().run(),
+            preesed: false,
+        },
+        {
+            icon: <MinusSquare className="size-4" />, // Lucide icon for "delete row"
+            onClick: () => editor.chain().focus().deleteRow().run(),
+            preesed: false,
+        },
+        {
+            icon: <Plus className="size-4" />, // Lucide icon for "add column"
+            onClick: () => editor.chain().focus().addColumnAfter().run(),
+            preesed: false,
+        },
+        {
+            icon: <Minus className="size-4" />, // Lucide icon for "delete column"
+            onClick: () => editor.chain().focus().deleteColumn().run(),
+            preesed: false,
+        },
+        {
+            icon: <Trash className="size-4" />, // Lucide icon for "delete entire table"
+            onClick: () => editor.chain().focus().deleteTable().run(),
+            preesed: false,
+        },
+
+
+
+
         {
             icon: <Heading1 className="size-4" />,
             onClick: () => editor.chain().focus().toggleHeading({ level: 1 }).run(),
