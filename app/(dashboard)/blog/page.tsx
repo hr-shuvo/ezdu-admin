@@ -11,6 +11,10 @@ import Loading from "@/app/(dashboard)/loading";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import CustomPagination from "@/components/common/pagination";
 import { loadBlogPost } from "@/app/_services/public/blog-post-service";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+dayjs.extend(relativeTime);
+
 
 const BlogPage = () => {
     const {setBreadcrumbList} = useBreadcrumb();
@@ -82,6 +86,8 @@ const BlogPage = () => {
                                             <TableRow>
                                                 <TableHead className='text-center'>Sl</TableHead>
                                                 <TableHead className='text-center'>Title</TableHead>
+                                                <TableHead className='text-center'>Slug</TableHead>
+                                                <TableHead className='text-center'>Type</TableHead>
                                                 <TableHead className='text-center'>Modified at</TableHead>
                                                 <TableHead className='text-center'>Action</TableHead>
                                             </TableRow>
@@ -96,7 +102,9 @@ const BlogPage = () => {
                                                             <TableCell
                                                                 className='border-r text-center'>{(currentPage - 1) * pageSize + index + 1}</TableCell>
                                                             <TableCell className='border-r '>{data.title}</TableCell>
-                                                            <TableCell className='border-r '>{data.updatedAt}</TableCell>
+                                                            <TableCell className='border-r '>{data.slug}</TableCell>
+                                                            <TableCell className='border-r '>{data.type}</TableCell>
+                                                            <TableCell className='border-r text-center'>{dayjs(data.updatedAt).format('MMM D, YYYY h:mm A')}</TableCell>
 
                                                             <TableCell>
                                                                 <div className="flex justify-center gap-1">

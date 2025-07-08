@@ -300,7 +300,6 @@ const BlogEditPage = () => {
                                                     <Textarea
                                                         {...field}
                                                         placeholder="Enter Description"
-                                                        type="text"
                                                         disabled={isPending}
                                                     />
                                                 </FormControl>
