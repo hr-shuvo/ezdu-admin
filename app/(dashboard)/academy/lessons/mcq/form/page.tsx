@@ -113,7 +113,7 @@ const AcademyMcqCreatePage = () => {
         // console.log('upsert mcq: ', values);
 
         const file = form.getValues('imageData');
-        if (file && file.size > 50000) {
+        if (file && file.size > 200000) { // 200kb
             toast.error('Image size too large');
             return null;
         }

@@ -13,7 +13,7 @@ export const BlogSchema = z.object({
     }),
     published: z.boolean(),
     metaDescription: z.string().optional(),
-    coverImage: z.string().optional(),
+    coverImage: z.any().optional(),
     tags: z.array(z.string()).optional(),
     type: z.string().optional(),
 });

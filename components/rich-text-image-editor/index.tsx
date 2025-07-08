@@ -69,8 +69,7 @@ export const RichTextEditor = forwardRef<HTMLDivElement, Props>(
                     inline: true,
                     allowBase64: true,
                     HTMLAttributes: {
-                        class: "max-w-full h-auto",
-                        style: "max-width: 100%; height: auto;"
+                        style: "display: block; max-width: 50%; height: auto; margin: 0 auto;"
                     }
                 }),
 

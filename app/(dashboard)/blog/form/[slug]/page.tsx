@@ -1,14 +1,14 @@
 'use client';
 
 import { useBreadcrumb } from "@/components/common/breadcrumb";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { BlogSchema } from "@/schemas/public/blogSchema";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import { upsertBlog } from "@/app/_services/public/blog-post-service";
+import { getBlogPost, upsertBlog } from "@/app/_services/public/blog-post-service";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { BiArrowBack } from "react-icons/bi";
@@ -23,9 +23,10 @@ import { BlogPostType } from "@/utils/common";
 import { Textarea } from "@/components/ui/textarea";
 
 
-const BlogCreatePage = () => {
+const BlogEditPage = () => {
     const { setBreadcrumbList } = useBreadcrumb();
     const router = useRouter();
+    const params = useParams();
     const [isPending, startTransition] = useTransition();
 
     useEffect(() => {
@@ -52,6 +53,20 @@ const BlogCreatePage = () => {
         },
     });
 
+    const { reset } = form;
+
+    useEffect(() => {
+        if (params.slug) {
+            // Load the blog post data here using params.slug
+            // For example, you can fetch the blog post data from an API
+            // and then set the form values using reset
+            getBlogPost(params.slug).then(blogPost => {
+                console.log(blogPost);
+                reset(blogPost);
+            });
+        }
+    }, [params.slug, reset]);
+
 
     const onSubmit = async (values: z.infer<typeof BlogSchema>) => {
 
@@ -62,6 +77,7 @@ const BlogCreatePage = () => {
         }
 
         const formData = new FormData();
+        formData.append("_id", values._id || '');
         formData.append('title', values.title);
         formData.append('slug', values.slug);
         formData.append('content', values.content);
@@ -312,7 +328,7 @@ const BlogCreatePage = () => {
                                             variant="secondary"
                                             disabled={isPending}
                                         >
-                                            Create
+                                            Update
                                         </Button>
                                     </div>
 
@@ -331,4 +347,4 @@ const BlogCreatePage = () => {
     )
 }
 
-export default BlogCreatePage;
+export default BlogEditPage;

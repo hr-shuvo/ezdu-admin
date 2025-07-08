@@ -24,7 +24,7 @@ export const loadBlogPost = async (
 };
 
 
-export const getBlog= async (id?: any): Promise<any> => {
+export const getBlogPost= async (id?: any): Promise<any> => {
     try {
         const response = await httpClient.get<any>(`/blog/${id}`);
         // console.log(response)

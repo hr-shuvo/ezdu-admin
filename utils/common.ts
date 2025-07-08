@@ -39,4 +39,16 @@ export const AcademyGroupType: {
         { text: "Commerce", value: "COMMERCE" },
     ];
 
+// 'regular', 'featured', 'highlight', 'popular'
+
+
+export const BlogPostType: {
+    text: string,
+    value: string
+}[] = [
+    { text: "Regular", value: "REGULAR" },
+    { text: "Featured", value: "FEATURED" },
+    { text: "Highlight", value: "HIGHLIGHT" },
+    { text: "Popular", value: "POPULAR" },
+];
     
