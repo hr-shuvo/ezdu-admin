@@ -5,6 +5,7 @@ export const BlogSchema = z.object({
     title: z.string().min(1, {
         message: 'Title is required',
     }),
+    subTitle: z.string().optional(),
     slug: z.string().min(1, {
         message: 'Slug is required',
     }),

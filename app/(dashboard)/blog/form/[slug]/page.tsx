@@ -42,6 +42,7 @@ const BlogEditPage = () => {
         resolver: zodResolver(BlogSchema),
         defaultValues: {
             title: "",
+            subTitle: "",
             slug: "",
             content: "",
             published: false,
@@ -79,6 +80,7 @@ const BlogEditPage = () => {
         const formData = new FormData();
         formData.append("_id", values._id || '');
         formData.append('title', values.title);
+        formData.append('subTitle', values.subTitle || '');
         formData.append('slug', values.slug);
         formData.append('content', values.content);
         formData.append('published', values.published ? 'true' : 'false');
@@ -175,6 +177,27 @@ const BlogEditPage = () => {
                                                     <Input
                                                         {...field}
                                                         placeholder="Enter slug (unique identifier)"
+                                                        type="text"
+                                                        disabled={isPending}
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
+
+                                <div className='col-span-4 md:col-span-4 mt-2'>
+                                    <FormField
+                                        control={form.control}
+                                        name="subTitle"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Subtitle</FormLabel>
+                                                <FormControl>
+                                                    <Input
+                                                        {...field}
+                                                        placeholder="Enter subtitle"
                                                         type="text"
                                                         disabled={isPending}
                                                     />
