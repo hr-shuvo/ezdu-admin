@@ -83,6 +83,34 @@ export const MenuBar = ({ editor }: { editor: Editor | null }) => {
         },
     ];
 
+    const MathOptions = [
+        {
+            icon: <span className="text-sm font-mono">∫</span>, // Example math icon or your own
+            onClick: () => {
+                const latex = prompt("Enter inline math (LaTeX):", "E = mc^2");
+                if (latex) {
+                    editor
+                        .chain()
+                        .focus()
+                        .insertInlineMath({ latex })
+                        .setTextSelection(editor.state.selection.to + 1) // Move cursor right after inserted node
+                        .run();
+                }
+            },
+            pressed: false,
+        },
+        {
+            icon: <span className="text-sm font-mono">𝛴</span>, // Another math icon for block math
+            onClick: () => {
+                const latex = prompt("Enter block math (LaTeX):", "\\int_0^1 x^2 dx");
+                if (latex) {
+                    editor.chain().focus().insertBlockMath({ latex }).run();
+                }
+            },
+            pressed: false,
+        },
+    ];
+
     return (
         <div className="border rounded-md p-1 mb-1 bg-slate-50 space-x-2 z-50">
             {Options.map((option, index) => (
@@ -90,6 +118,17 @@ export const MenuBar = ({ editor }: { editor: Editor | null }) => {
                     className="cursor-pointer"
                     key={index}
                     pressed={option.preesed}
+                    onPressedChange={option.onClick}
+                >
+                    {option.icon}
+                </Toggle>
+            ))}
+
+            {MathOptions.map((option, index) => (
+                <Toggle
+                    className="cursor-pointer"
+                    key={`math-${index}`}
+                    pressed={option.pressed}
                     onPressedChange={option.onClick}
                 >
                     {option.icon}

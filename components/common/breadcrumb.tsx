@@ -52,7 +52,7 @@ export const CustomBreadcrumb = () => {
                                 )}
 
                                 <BreadcrumbItem className="hidden sm:block">
-                                    <BreadcrumbLink href="#">
+                                    <BreadcrumbLink>
                                         {b.title}
                                     </BreadcrumbLink>
                                 </BreadcrumbItem>

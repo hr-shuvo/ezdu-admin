@@ -4,6 +4,7 @@ import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import TextAlign from "@tiptap/extension-text-align";
 import Highlight from '@tiptap/extension-highlight';
+import Math, { migrateMathStrings } from '@tiptap/extension-mathematics'
 
 import { MenuBar } from './menu-bar';
 import { forwardRef, useEffect, useImperativeHandle } from 'react';
@@ -37,6 +38,7 @@ export const RichTextEditor = forwardRef<HTMLDivElement, Props>(
                     types: ["heading", "paragraph"],
                 }),
                 Highlight,
+                Math
             ],
             content: '',
             editorProps: {
